@@ -45,17 +45,17 @@ class Item {
 
 // 各アイテム（11種類のインスタンスを配列へ）
 const items = [
-    new Item("FlipMachine", "25", "img/grill.jpeg", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "0"),
-    new Item("ETFStock", "0.1%", "img/ETFStock.jpg", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0"),
-    new Item("ETFBonds", "0.07%", "img/ETFBonds.jpg", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0"),
-    new Item("LemonadeStand", "30", "img/LemonadeStand.jpg", "不動産", "1000", "毎秒30円を取得する", "30,000", "0"),
-    new Item("IcecreamTruck", "120", "img/icecreamTruck.jpg", "不動産", "500", "毎秒120円を取得する", "100,000", "0"),
-    new Item("House", "32,000", "img/House.jpeg", "不動産", "100", "毎秒32,000円を取得する", "20,000,000", "0"),
-    new Item("TownHouse", "64,000", "img/TownHouse.webp", "不動産", "100", "毎秒64,000円を取得する", "40,000,000", "0"),
-    new Item("Mansion", "500,000", "img/Mansion.webp", "不動産", "20", "毎秒500,000円を取得する", "250,000,000", "0"),
-    new Item("industrialSpace", "2,200,000", "img/industrialSpace.jpg", "不動産", "10", "毎秒2,200,000円を取得する", "1,000,000,000", "0"),
-    new Item("HotelSkyscraper", "25,000,000", "img/HotelSkyscraper.jpg", "不動産", "5", "毎秒25,000,000円を取得する", "10,000,000,000", "0"),
-    new Item("BulletSpeedSkyRailway", "30,000,000,000", "img/BulletSpeedSkyRailway.jpg", "不動産", "1", "毎秒30,000,000,000円を取得する", "10,000,000,000,000", "0"),
+    new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "0"),
+    new Item("ETFStock", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0"),
+    new Item("ETFBonds", "0.07%", "https://3.bp.blogspot.com/-q3fsc28YHhA/WkR92wRCAZI/AAAAAAABJVo/7R3S9tpX2W8VmcXV40c0NOCZ1Ch2bVgrACLcBGAs/s800/kabu_chart_man_happy.png", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0"),
+    new Item("LemonadeStand", "30", "https://1.bp.blogspot.com/-jWZ_H-M9Bbc/XDXbzDX4G9I/AAAAAAABREQ/ctF0S_EEmD47tNWMcLhFssNCteQquhWyQCLcBGAs/s800/lemonade_shop_boy.png", "不動産", "1000", "毎秒30円を取得する", "30,000", "0"),
+    new Item("IcecreamTruck", "120", "https://2.bp.blogspot.com/-IDJ-PAml6xI/UvTd5BRmybI/AAAAAAAAdf8/qkKtOM235yw/s800/job_icecream_ya.png", "不動産", "500", "毎秒120円を取得する", "100,000", "0"),
+    new Item("House", "32,000", "https://1.bp.blogspot.com/-RE_LtIhPBps/VCOJt4M6ZEI/AAAAAAAAm1k/WGvtkInZP9s/s800/house_reform.png", "不動産", "100", "毎秒32,000円を取得する", "20,000,000", "0"),
+    new Item("TownHouse", "64,000", "https://1.bp.blogspot.com/-AnmpceWlLCQ/UgsvKuxswbI/AAAAAAAAXRE/wXGzSvKzMqE/s800/solar_panel.png", "不動産", "100", "毎秒64,000円を取得する", "40,000,000", "0"),
+    new Item("Mansion", "500,000", "https://2.bp.blogspot.com/-mcBTpFJvFNo/WeAFbqrzyHI/AAAAAAABHjQ/5cGZy_hvgtwumLbyggYibhxmj7lunDhwACLcBGAs/s800/building_mansion2.png", "不動産", "20", "毎秒500,000円を取得する", "250,000,000", "0"),
+    new Item("industrialSpace", "2,200,000", "https://4.bp.blogspot.com/-X6Y32Uh5ud4/W_UF70_iobI/AAAAAAABQT0/gF3Braf7peIkKgr_MWRSRz_RuCR4wMnsACLcBGAs/s800/building_koujou_entotsu.png", "不動産", "10", "毎秒2,200,000円を取得する", "1,000,000,000", "0"),
+    new Item("HotelSkyscraper", "25,000,000", "https://3.bp.blogspot.com/-qbqb7xIicEA/VpjCnDpHkfI/AAAAAAAA3EE/8NqVEr8MMxQ/s800/kousou_hotel.png", "不動産", "5", "毎秒25,000,000円を取得する", "10,000,000,000", "0"),
+    new Item("BulletSpeedSkyRailway", "30,000,000,000", "https://4.bp.blogspot.com/-xeElVHnaO6E/UUhH-h33LkI/AAAAAAAAO6s/ZdByhm_3NRI/s1600/train_shinkansen.png", "不動産", "1", "毎秒30,000,000,000円を取得する", "10,000,000,000,000", "0"),
 ];
 
 // submitした名前からインスタンスを生成する関数
@@ -95,7 +95,7 @@ function mainGamePage(userAccount) {
     // バーガーの画像
     let bargerImg = document.createElement("img");
     bargerImg.classList.add("game-img");
-    bargerImg.setAttribute("src", "img/barger.jpeg");
+    bargerImg.setAttribute("src", "https://1.bp.blogspot.com/-ccmRa-W5FdQ/WGnPWhQSnzI/AAAAAAABA4w/krKcel6z1hobC87K1Vj9bG_Me_AfBo15QCLcB/s800/hamburger_teriyaki_burger.png");
 
     let rightContents = document.createElement("div");
     rightContents.classList.add("right-contents", "col-8", "bg-darkBlue");
