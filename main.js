@@ -114,7 +114,7 @@ function mainGamePage(userAccount) {
     let page = 0;
     let currItems = 3;
     // アイテム表示部分を関数に切り出す
-    let buyItemsInfo = itemsInfo(items, page, currItems);
+    // let buyItemsInfo = itemsInfo(items, page, currItems);
 
     // // 「<」ボタンを押した時に前の3つのアイテムを表示する
     // // 「>」ボタンを押した時に次の3つのアイテムを表示する
@@ -146,7 +146,7 @@ function mainGamePage(userAccount) {
 
     // 生成したdivタグに要素を追加していく
     leftContents.append(bargerWrap, bargerImg);
-    rightContents.append(userInfo, buyItemsInfo, saveResetIcon);
+    rightContents.append(userInfo, itemsInfo(items, page, currItems), saveResetIcon);
     container.append(leftContents, rightContents);
 
 
@@ -163,14 +163,14 @@ function mainGamePage(userAccount) {
     // 「<」ボタンを押した時に前の3つのアイテムを表示する
 
     // 「>」ボタンを押した時に次の3つのアイテムを表示する
-    let nextBtn = buyItemsInfo.querySelectorAll(".next-btn")[0];
-    nextBtn.addEventListener("click", function () {
-        rightContents.innerHTML = "";
-        buyItemsInfo = itemsInfo(items, page+3, currItems+3);
-        rightContents.append(userInfo, buyItemsInfo, saveResetIcon);
-        console.log("nextBtn");
-    });
-    console.log(buyItemsInfo);
+    // let nextBtn = buyItemsInfo.querySelectorAll(".next-btn")[0];
+    // nextBtn.addEventListener("click", function () {
+    //     rightContents.innerHTML = "";
+    //     buyItemsInfo = itemsInfo(items, page+3, currItems+3);
+    //     rightContents.append(userInfo, buyItemsInfo, saveResetIcon);
+    //     console.log("nextBtn");
+    // });
+    // console.log(buyItemsInfo);
 
     return container;
 }
@@ -205,17 +205,32 @@ function itemsInfo(items, page, currItems) {
         <button type="button" class="back-btn col-3 btn btn-info">&lt;</button>
         <button type="button" class="next-btn col-3 btn btn-info">&gt;</button>
     `;
+
+    let container = document.createElement("div");
+    container.append(buyItemsInfo, itemSelectBtn);
+
+    // 「<」ボタンを押した時に前の3つのアイテムを表示する
+    // 「>」ボタンを押した時に次の3つのアイテムを表示する
+    let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
+    nextBtn.addEventListener("click", function () {
+        buyItemsInfo.innerHTML = "";
+        buyItemsInfo.append(itemsInfo(items, page + 3, currItems + 3));
+        console.log(buyItemsInfo);
+    });
     buyItemsInfo.append(itemSelectBtn);
-    // // 「<」ボタンを押した時に前の3つのアイテムを表示する
-    // // 「>」ボタンを押した時に次の3つのアイテムを表示する
-    // let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
-    // nextBtn.addEventListener("click", function () {
-    //     itemsInfo(items, 2);
-    // });
 
-
-    return buyItemsInfo;
+    return container;
 }
+
+// function itemsRender(buyItemsInfo) {
+//         let nextBtn = buyItemsInfo.querySelectorAll(".next-btn")[0];
+//         nextBtn.addEventListener("click", function () {
+//         buyItemsInfo = "";
+//         buyItemsInfo = itemsInfo(items, page+3, currItems+3);
+//         console.log(buyItemsInfo);
+//     });
+//     return buyItemsInfo;
+// }
 
 // itemsInfo(items);
 // console.log(Math.floor(11 / 3));
