@@ -179,7 +179,7 @@ function itemsInfo(items, page, currItems) {
 
     let buyItemsInfo = document.createElement("div");
     buyItemsInfo.classList.add("buy-items-info", "flex-wrap", "d-flex", "justify-content-center", "flex-column");
-    // ループでアイテムを３つ表示
+    // ループでアイテムを３つ表示 (0,2)(3,5)(6,9)
     for (let i = page; i < currItems; i++){
         buyItemsInfo.innerHTML +=
         `
@@ -210,11 +210,15 @@ function itemsInfo(items, page, currItems) {
     container.append(buyItemsInfo, itemSelectBtn);
 
     // 「<」ボタンを押した時に前の3つのアイテムを表示する
-    let backBtn = itemSelectBtn.querySelectorAll(".back-btn")[0];
-    backBtn.addEventListener("click", function () {
-        buyItemsInfo.innerHTML = "";
-        buyItemsInfo.append(itemsInfo(items, page - 3, currItems - 3));
-    });
+    // 最初のページの場合は何もしない。
+    if (page !== 0) {
+        let backBtn = itemSelectBtn.querySelectorAll(".back-btn")[0];
+        backBtn.addEventListener("click", function () {
+            buyItemsInfo.innerHTML = "";
+            buyItemsInfo.append(itemsInfo(items, page - 3, currItems - 3));
+        });
+    }
+
     // 「>」ボタンを押した時に次の3つのアイテムを表示する
     let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
     nextBtn.addEventListener("click", function () {
@@ -256,3 +260,4 @@ function itemsInfo(items, page, currItems) {
 
 // let a = "100,000";
 // console.log(parseInt(a.replace(",", "")) + 1000);
+
