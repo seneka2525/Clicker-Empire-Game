@@ -210,6 +210,11 @@ function itemsInfo(items, page, currItems) {
     container.append(buyItemsInfo, itemSelectBtn);
 
     // 「<」ボタンを押した時に前の3つのアイテムを表示する
+    let backBtn = itemSelectBtn.querySelectorAll(".back-btn")[0];
+    backBtn.addEventListener("click", function () {
+        buyItemsInfo.innerHTML = "";
+        buyItemsInfo.append(itemsInfo(items, page - 3, currItems - 3));
+    });
     // 「>」ボタンを押した時に次の3つのアイテムを表示する
     let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
     nextBtn.addEventListener("click", function () {
