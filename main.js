@@ -30,13 +30,13 @@ class UserGameAccount {
 // 購入可能なアイテムクラス
 class Item {
 
-    // コンストラクタ関数(名前、タイプ、最大購入数、説明、値段)
-    constructor(name, effect, img, type, maxBuy, description, price, owned) {
+    // コンストラクタ関数(名前、効果、画像、タイプ、最大購入数、説明、値段、所持数)
+    constructor(name, effect, img, type, maxPurchases, description, price, owned) {
         this.name = name;
         this.effect = effect;
         this.img = img;
         this.type = type;
-        this.maxBuy = maxBuy;
+        this.maxPurchases = maxPurchases;
         this.description = description;
         this.price = price;
         this.owned = owned;
@@ -152,11 +152,11 @@ function itemsInfo(items, page, itemDiv) {
     for (let i = page; i < items.length; i++) {
         if (i < itemDiv) {
             buyItemsInfo.innerHTML +=
-                `
-            <div class="buy-item row bg-lightBlue flex-wrap m-1">
+        `
+            <div class="buy-item row bg-lightBlue flex-wrap m-1" data-item-num="${[i]}">
                 <img class="buy-item-img col-3 p-0" src="${items[i].img}" alt="">
                 <div class="item-title col-4">
-                    <p class="font-l">${items[i].name}</p>
+                    <p id="itemName" class="font-l">${items[i].name}</p>
                     <p class="m-0">¥${items[i].price}</p>
                 </div>
                 <div class="item-money p-0 col-4 d-flex align-items-end">
@@ -170,6 +170,7 @@ function itemsInfo(items, page, itemDiv) {
         }
     }
 
+
     let itemSelectBtn = document.createElement("div");
     itemSelectBtn.classList.add("d-flex", "justify-content-between");
     itemSelectBtn.innerHTML =
@@ -180,6 +181,16 @@ function itemsInfo(items, page, itemDiv) {
 
     let container = document.createElement("div");
     container.append(buyItemsInfo, itemSelectBtn);
+
+    // 各アイテムクリック時に詳細を表示
+    let itemDetail = buyItemsInfo.querySelectorAll(".buy-item");
+    itemDetail.forEach(function (itemEle) {
+        itemEle.addEventListener("click", function () {
+            buyItemsInfo.innerHTML = "";
+            buyItemsInfo.append(itemDetailPage(itemEle));
+        });
+    });
+
 
     // 「<」ボタンを押した時に前の3つのアイテムを表示する
     // 最初のページの場合は何もしない。
@@ -205,3 +216,42 @@ function itemsInfo(items, page, itemDiv) {
     return container;
 }
 
+function itemDetailPage(item) {
+    let itemNum = parseInt(item.getAttribute("data-item-num"));
+    let itemDetail = document.createElement("div");
+
+    itemDetail.classList.add("item-detail", "bg-lightBlue");
+    
+    itemDetail.innerHTML =
+    `
+        <div class="item-about p-2 d-flex justify-content-between">
+            <div class="item-about-left text-left d-flex justify-content-start flex-column">
+                <p class="m-0">${items[itemNum].name}</p>
+                <p class="font-s m-0">Max Purchases: ${items[itemNum].maxPurchases}</p>
+                <p class="font-s m-0">Price: ¥${items[itemNum].price}</p>
+                <p class="font-s m-0">Get ${items[itemNum].effect} extra yen per second</p>
+            </div>
+            <div class="item-about-right col-4 p-0">
+                <img class="buy-item-img" src="${items[itemNum].img}" alt="">
+            </div>
+        </div>
+        <div class="purchase-input text-left p-2">
+            <label >
+                <p class="mb-1">How Many would you like to purchase?</p>
+                <input type="number" class="text-right">
+            </label>
+            <p class="text-right p-0 m-0">Total : $100,000,000</p>
+        </div>
+    `;
+
+    let backPurchaseBtn = document.createElement("div");
+    backPurchaseBtn.classList.add("d-flex", "justify-content-between", "m-2");
+    backPurchaseBtn.innerHTML =
+    `
+        <button type="button" class="back-btn col-5 btn btn-info">Go Back</button>
+        <button type="button" class="next-btn col-5 btn btn-info">Purchase</button>
+    `;
+    itemDetail.append(backPurchaseBtn);
+
+    return itemDetail;
+}
