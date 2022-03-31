@@ -187,7 +187,7 @@ function itemsInfo(items, page, itemDiv) {
     itemDetail.forEach(function (itemEle) {
         itemEle.addEventListener("click", function () {
             buyItemsInfo.innerHTML = "";
-            buyItemsInfo.append(itemDetailPage(itemEle));
+            buyItemsInfo.append(itemDetailPage(itemEle, buyItemsInfo, page, itemDiv));
         });
     });
 
@@ -216,7 +216,7 @@ function itemsInfo(items, page, itemDiv) {
     return container;
 }
 
-function itemDetailPage(item) {
+function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
     let itemNum = parseInt(item.getAttribute("data-item-num"));
     let itemDetail = document.createElement("div");
 
@@ -252,6 +252,16 @@ function itemDetailPage(item) {
         <button type="button" class="next-btn col-5 btn btn-info">Purchase</button>
     `;
     itemDetail.append(backPurchaseBtn);
+
+    let goBackBtn = backPurchaseBtn.querySelectorAll(".back-btn")[0];
+    goBackBtn.addEventListener("click", function () {
+        buyItemsInfo.innerHTML = "";
+        buyItemsInfo.append(itemsInfo(items, page, itemDiv));
+    });
+
+    let purchaseBtn = backPurchaseBtn.querySelectorAll(".next-btn")[0];
+
+
 
     return itemDetail;
 }
