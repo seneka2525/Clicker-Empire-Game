@@ -112,27 +112,7 @@ function mainGamePage(userAccount) {
 
     // アイテムの表示ページ
     let page = 0;
-    let currItems = 3;
-    // アイテム表示部分を関数に切り出す
-    // let buyItemsInfo = itemsInfo(items, page, currItems);
-
-    // // 「<」ボタンを押した時に前の3つのアイテムを表示する
-    // // 「>」ボタンを押した時に次の3つのアイテムを表示する
-    // let nextBtn = buyItemsInfo.querySelectorAll(".next-btn")[0];
-    // nextBtn.addEventListener("click", function () {
-    //     buyItemsInfo = "";
-    //     buyItemsInfo = itemsInfo(items, page+3, currItems+3);
-    //     console.log(buyItemsInfo);
-    // });
-
-
-
-
-
-
-
-
-
+    let itemDiv = 3;
 
 
     let saveResetIcon = document.createElement("div");
@@ -146,7 +126,7 @@ function mainGamePage(userAccount) {
 
     // 生成したdivタグに要素を追加していく
     leftContents.append(bargerWrap, bargerImg);
-    rightContents.append(userInfo, itemsInfo(items, page, currItems), saveResetIcon);
+    rightContents.append(userInfo, itemsInfo(items, page, itemDiv), saveResetIcon);
     container.append(leftContents, rightContents);
 
 
@@ -160,29 +140,17 @@ function mainGamePage(userAccount) {
         moneyStr.innerHTML = `¥${userAccount.money}`;
     });
 
-    // 「<」ボタンを押した時に前の3つのアイテムを表示する
-
-    // 「>」ボタンを押した時に次の3つのアイテムを表示する
-    // let nextBtn = buyItemsInfo.querySelectorAll(".next-btn")[0];
-    // nextBtn.addEventListener("click", function () {
-    //     rightContents.innerHTML = "";
-    //     buyItemsInfo = itemsInfo(items, page+3, currItems+3);
-    //     rightContents.append(userInfo, buyItemsInfo, saveResetIcon);
-    //     console.log("nextBtn");
-    // });
-    // console.log(buyItemsInfo);
-
     return container;
 }
 
-function itemsInfo(items, page, currItems) {
+function itemsInfo(items, page, itemDiv) {
 
     let buyItemsInfo = document.createElement("div");
     buyItemsInfo.classList.add("buy-items-info", "flex-wrap", "d-flex", "justify-content-center", "flex-column");
-    // ループでアイテムを３つ表示 (0,2)(3,5)(6,9) page = 0, currItems = 3
+    // ループでアイテムを３つ表示 (0,2)(3,5)(6,9) page = 0, itemDiv = 3
     
     for (let i = page; i < items.length; i++) {
-        if (i < currItems) {
+        if (i < itemDiv) {
             buyItemsInfo.innerHTML +=
                 `
             <div class="buy-item row bg-lightBlue flex-wrap m-1">
@@ -219,16 +187,16 @@ function itemsInfo(items, page, currItems) {
         let backBtn = itemSelectBtn.querySelectorAll(".back-btn")[0];
         backBtn.addEventListener("click", function () {
             buyItemsInfo.innerHTML = "";
-            buyItemsInfo.append(itemsInfo(items, page - 3, currItems - 3));
+            buyItemsInfo.append(itemsInfo(items, page - 3, itemDiv - 3));
         });
     }
 
     // 「>」ボタンを押した時に次の3つのアイテムを表示する
-    if (currItems !== items.length + 1) {
+    if (itemDiv !== items.length + 1) {
         let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
         nextBtn.addEventListener("click", function () {
             buyItemsInfo.innerHTML = "";
-            buyItemsInfo.append(itemsInfo(items, page + 3, currItems + 3));
+            buyItemsInfo.append(itemsInfo(items, page + 3, itemDiv + 3));
         });
     }
 
@@ -236,34 +204,4 @@ function itemsInfo(items, page, currItems) {
 
     return container;
 }
-
-// function itemsRender(buyItemsInfo) {
-//         let nextBtn = buyItemsInfo.querySelectorAll(".next-btn")[0];
-//         nextBtn.addEventListener("click", function () {
-//         buyItemsInfo = "";
-//         buyItemsInfo = itemsInfo(items, page+3, currItems+3);
-//         console.log(buyItemsInfo);
-//     });
-//     return buyItemsInfo;
-// }
-
-// itemsInfo(items);
-// console.log(Math.floor(11 / 3));
-// // 表示するアイテム(3つ）のHTMLを生成する関数
-// function renderItems(items) {
-//     for (let i = 0; i < items.length; i++){
-
-//     }
-// }
-
-
-
-
-// console.log(items[0])
-
-// initializeUserAccount();
-// mainGamePage(userAccount);
-
-// let a = "100,000";
-// console.log(parseInt(a.replace(",", "")) + 1000);
 
