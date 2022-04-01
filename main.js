@@ -259,10 +259,11 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
     `;
     itemDetail.append(backPurchaseBtn);
 
+    // アイテム詳細からGo Backボタンを押した時
     let goBackBtn = backPurchaseBtn.querySelectorAll(".back-btn")[0];
     goBackBtn.addEventListener("click", function () {
         config.itemsList.innerHTML = "";
-        config.itemsList.append(itemsInfo(items, page, itemDiv));
+        itemsInfo(items, page, itemDiv);
     });
 
     let purchaseBtn = backPurchaseBtn.querySelectorAll(".next-btn")[0];
