@@ -2,6 +2,7 @@
 const config = {
     initialform: document.getElementById("initial-form"),
     gamePage: document.getElementById("gamePage"),
+    itemsList: document.createElement("div"),
 }
 
 // 登録ユーザーの情報
@@ -143,6 +144,7 @@ function mainGamePage(userAccount) {
     return container;
 }
 
+
 function itemsInfo(items, page, itemDiv) {
 
     let buyItemsInfo = document.createElement("div");
@@ -179,15 +181,19 @@ function itemsInfo(items, page, itemDiv) {
         <button type="button" class="next-btn col-3 btn btn-info">&gt;</button>
     `;
 
-    let container = document.createElement("div");
-    container.append(buyItemsInfo, itemSelectBtn);
+
+    // ========= ここでいつも作成されるdivタグをどうにかする！！！！！！！！！ ===========
+    // let container = document.createElement("div");
+    // container.append(buyItemsInfo, itemSelectBtn);
+    config.itemsList.append(buyItemsInfo, itemSelectBtn);
+
 
     // 各アイテムクリック時に詳細を表示
     let itemDetail = buyItemsInfo.querySelectorAll(".buy-item");
     itemDetail.forEach(function (itemEle) {
         itemEle.addEventListener("click", function () {
-            buyItemsInfo.innerHTML = "";
-            buyItemsInfo.append(itemDetailPage(itemEle, buyItemsInfo, page, itemDiv));
+            config.itemsList.innerHTML = "";
+            config.itemsList.append(itemDetailPage(itemEle, buyItemsInfo, page, itemDiv));
         });
     });
 
@@ -197,8 +203,8 @@ function itemsInfo(items, page, itemDiv) {
     if (page !== 0) {
         let backBtn = itemSelectBtn.querySelectorAll(".back-btn")[0];
         backBtn.addEventListener("click", function () {
-            buyItemsInfo.innerHTML = "";
-            buyItemsInfo.append(itemsInfo(items, page - 3, itemDiv - 3));
+            config.itemsList.innerHTML = "";
+            itemsInfo(items, page - 3, itemDiv - 3);
         });
     }
 
@@ -206,14 +212,14 @@ function itemsInfo(items, page, itemDiv) {
     if (itemDiv !== items.length + 1) {
         let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
         nextBtn.addEventListener("click", function () {
-            buyItemsInfo.innerHTML = "";
-            buyItemsInfo.append(itemsInfo(items, page + 3, itemDiv + 3));
+            config.itemsList.innerHTML = "";
+            itemsInfo(items, page + 3, itemDiv + 3);
         });
     }
 
     buyItemsInfo.append(itemSelectBtn);
 
-    return container;
+    return config.itemsList;
 }
 
 function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
@@ -255,8 +261,8 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
 
     let goBackBtn = backPurchaseBtn.querySelectorAll(".back-btn")[0];
     goBackBtn.addEventListener("click", function () {
-        buyItemsInfo.innerHTML = "";
-        buyItemsInfo.append(itemsInfo(items, page, itemDiv));
+        config.itemsList.innerHTML = "";
+        config.itemsList.append(itemsInfo(items, page, itemDiv));
     });
 
     let purchaseBtn = backPurchaseBtn.querySelectorAll(".next-btn")[0];
