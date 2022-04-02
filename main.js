@@ -26,6 +26,9 @@ class UserGameAccount {
         this.clickCount++;
         this.money += this.flipMachine;
     }
+
+    // バーガー焼き機の所持数でバーガークリック時の取得金額を計算
+
 }
 
 // 購入可能なアイテムクラス
@@ -241,14 +244,11 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
                 <img class="buy-item-img" src="${items[itemNum].img}" alt="">
             </div>
         </div>
-        <div class="purchase-input text-left p-2">
-            <label >
-                <p class="mb-1">How Many would you like to purchase?</p>
-                <input type="number" class="text-right">
-            </label>
-            <p class="text-right p-0 m-0">Total : $100,000,000</p>
-        </div>
     `;
+
+    // インプット部を生成
+    purchaseWrap(itemDetail, items[itemNum]);
+
 
     let backPurchaseBtn = document.createElement("div");
     backPurchaseBtn.classList.add("d-flex", "justify-content-between", "m-2");
@@ -257,7 +257,24 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
         <button type="button" class="back-btn col-5 btn btn-info">Go Back</button>
         <button type="button" class="next-btn col-5 btn btn-info">Purchase</button>
     `;
+
     itemDetail.append(backPurchaseBtn);
+
+
+    // inputの数値が変わったら実行
+    itemDetail.querySelector("input").addEventListener("change", function () {
+        let inputValue = parseInt(itemDetail.querySelector("input").value);
+        calculateTotalAmount(inputValue, items[itemNum].price);
+        itemDetail.querySelector(".total-price").innerHTML = "Total : ¥" + calculateTotalAmount(inputValue, items[itemNum].price).toLocaleString();
+        
+
+
+        console.log(itemDetail.querySelector(".total-price"));
+        console.log(calculateTotalAmount(inputValue, items[itemNum].price));
+        console.log(inputValue);
+    })
+
+
 
     // アイテム詳細からGo Backボタンを押した時
     let goBackBtn = backPurchaseBtn.querySelectorAll(".back-btn")[0];
@@ -271,4 +288,26 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
 
 
     return itemDetail;
+}
+
+// アイテム詳細内のinputタグ部を生成
+function purchaseWrap(itemDetailEle, itemNum) {
+    itemDetailEle.innerHTML +=
+    `
+        <div class="purchase-input text-left p-2">
+        <label >
+            <p class="mb-1">How Many would you like to purchase?</p>
+            <input type="number" class="text-right" min="0" max="${parseInt(itemNum.maxPurchases)}" value="1">
+        </label>
+        <p class="total-price text-right p-0 m-0">Total : ¥${itemNum.price}</p>
+        </div>
+    `;
+    return itemDetailEle;
+}
+
+function calculateTotalAmount(value, price) {
+    let total = 0;
+    let priceNum = parseInt(price.replace(/,/g, ""));
+    total = value * priceNum;
+    return total;
 }
