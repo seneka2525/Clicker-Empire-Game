@@ -24,6 +24,7 @@ class UserGameAccount {
     // ハンバーガークリック時にクリック数と所持金を増やす
     bargerClick() {
         this.clickCount++;
+        // this.money += this.flipMachine;
         this.money += this.flipMachine;
     }
 
@@ -49,7 +50,7 @@ class Item {
 
 // 各アイテム（11種類のインスタンスを配列へ）
 const items = [
-    new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "0"),
+    new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "1"),
     new Item("ETFStock", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0"),
     new Item("ETFBonds", "0.07%", "https://3.bp.blogspot.com/-q3fsc28YHhA/WkR92wRCAZI/AAAAAAABJVo/7R3S9tpX2W8VmcXV40c0NOCZ1Ch2bVgrACLcBGAs/s800/kabu_chart_man_happy.png", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0"),
     new Item("LemonadeStand", "30", "https://1.bp.blogspot.com/-jWZ_H-M9Bbc/XDXbzDX4G9I/AAAAAAABREQ/ctF0S_EEmD47tNWMcLhFssNCteQquhWyQCLcBGAs/s800/lemonade_shop_boy.png", "不動産", "1000", "毎秒30円を取得する", "30,000", "0"),
@@ -93,7 +94,7 @@ function mainGamePage(userAccount) {
     bargerWrap.innerHTML =
     `
         <p class="counter font-l">${userAccount.clickCount} Burgers</p>
-        <p>¥${userAccount.flipMachine} per second</p>
+        <p class="flip-total">¥${userAccount.flipMachine} per second</p>
     `;
 
     // バーガーの画像
@@ -280,8 +281,27 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
     let purchaseBtn = backPurchaseBtn.querySelectorAll(".next-btn")[0];
     purchaseBtn.addEventListener("click", function () {
         let totalPrice = calculateTotalAmount(itemDetail, items[itemNum].price);
-        console.log(totalPrice);
-        console.log(userAccount);
+        if (userAccount.money >= totalPrice) {
+            let inputValue = parseInt(itemDetail.querySelector("input").value);
+            items[itemNum].owned = inputValue + parseInt(items[itemNum].owned);
+            config.gamePage.querySelectorAll(".user-info-p")[3].innerHTML =
+            `
+                ¥${userAccount.money -= totalPrice}
+            `;
+            
+            userAccount.flipMachine = items[itemNum].effect * items[itemNum].owned;
+            config.gamePage.querySelector(".flip-total").innerHTML =
+            `
+                ¥${userAccount.flipMachine} per second;
+            `;
+            console.log(userAccount.flipMachine);
+            config.itemsList.innerHTML = "";
+            itemsInfo(items, page, itemDiv, userAccount);
+            // console.log(items[itemNum].owned);
+            // console.log(items[itemNum]);
+            // console.log(totalPrice);
+            // console.log(userAccount);
+        }
     });
 
 
