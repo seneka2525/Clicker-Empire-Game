@@ -261,18 +261,11 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
     itemDetail.append(backPurchaseBtn);
 
 
-    // inputの数値が変わったら実行
+    // inputの数値が変わったらトータル金額を更新
     itemDetail.querySelector("input").addEventListener("change", function () {
-        let inputValue = parseInt(itemDetail.querySelector("input").value);
-        calculateTotalAmount(inputValue, items[itemNum].price);
-        itemDetail.querySelector(".total-price").innerHTML = "Total : ¥" + calculateTotalAmount(inputValue, items[itemNum].price).toLocaleString();
-        
-
-
-        console.log(itemDetail.querySelector(".total-price"));
-        console.log(calculateTotalAmount(inputValue, items[itemNum].price));
-        console.log(inputValue);
-    })
+        let totalPrice = calculateTotalAmount(itemDetail ,items[itemNum].price);
+        itemDetail.querySelector(".total-price").innerHTML = "Total : ¥" + totalPrice.toLocaleString();
+    });
 
 
 
@@ -284,7 +277,10 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
     });
 
     let purchaseBtn = backPurchaseBtn.querySelectorAll(".next-btn")[0];
-
+    purchaseBtn.addEventListener("click", function () {
+        let totalPrice = calculateTotalAmount(itemDetail, items[itemNum].price);
+        console.log(totalPrice);
+    });
 
 
     return itemDetail;
@@ -305,9 +301,11 @@ function purchaseWrap(itemDetailEle, itemNum) {
     return itemDetailEle;
 }
 
-function calculateTotalAmount(value, price) {
+// アイテム詳細でトータル金額を計算する関数
+function calculateTotalAmount(itemEle, price) {
+    let inputValue = parseInt(itemEle.querySelector("input").value);
     let total = 0;
     let priceNum = parseInt(price.replace(/,/g, ""));
-    total = value * priceNum;
+    total = inputValue * priceNum;
     return total;
 }
