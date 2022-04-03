@@ -130,7 +130,7 @@ function mainGamePage(userAccount) {
 
     // 生成したdivタグに要素を追加していく
     leftContents.append(bargerWrap, bargerImg);
-    rightContents.append(userInfo, itemsInfo(items, page, itemDiv), saveResetIcon);
+    rightContents.append(userInfo, itemsInfo(items, page, itemDiv, userAccount), saveResetIcon);
     container.append(leftContents, rightContents);
 
 
@@ -148,7 +148,7 @@ function mainGamePage(userAccount) {
 }
 
 
-function itemsInfo(items, page, itemDiv) {
+function itemsInfo(items, page, itemDiv, userAccount) {
 
     let buyItemsInfo = document.createElement("div");
     buyItemsInfo.classList.add("buy-items-info", "flex-wrap", "d-flex", "justify-content-center", "flex-column");
@@ -196,7 +196,7 @@ function itemsInfo(items, page, itemDiv) {
     itemDetail.forEach(function (itemEle) {
         itemEle.addEventListener("click", function () {
             config.itemsList.innerHTML = "";
-            config.itemsList.append(itemDetailPage(itemEle, buyItemsInfo, page, itemDiv));
+            config.itemsList.append(itemDetailPage(itemEle, page, itemDiv, userAccount));
         });
     });
 
@@ -207,7 +207,7 @@ function itemsInfo(items, page, itemDiv) {
         let backBtn = itemSelectBtn.querySelectorAll(".back-btn")[0];
         backBtn.addEventListener("click", function () {
             config.itemsList.innerHTML = "";
-            itemsInfo(items, page - 3, itemDiv - 3);
+            itemsInfo(items, page - 3, itemDiv - 3, userAccount);
         });
     }
 
@@ -216,7 +216,7 @@ function itemsInfo(items, page, itemDiv) {
         let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
         nextBtn.addEventListener("click", function () {
             config.itemsList.innerHTML = "";
-            itemsInfo(items, page + 3, itemDiv + 3);
+            itemsInfo(items, page + 3, itemDiv + 3, userAccount);
         });
     }
 
@@ -225,7 +225,7 @@ function itemsInfo(items, page, itemDiv) {
     return config.itemsList;
 }
 
-function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
+function itemDetailPage(item, page, itemDiv, userAccount) {
     let itemNum = parseInt(item.getAttribute("data-item-num"));
     let itemDetail = document.createElement("div");
 
@@ -273,13 +273,15 @@ function itemDetailPage(item, buyItemsInfo, page, itemDiv) {
     let goBackBtn = backPurchaseBtn.querySelectorAll(".back-btn")[0];
     goBackBtn.addEventListener("click", function () {
         config.itemsList.innerHTML = "";
-        itemsInfo(items, page, itemDiv);
+        itemsInfo(items, page, itemDiv, userAccount);
     });
 
+    // アイテム詳細からPurchaseボタンを押した時
     let purchaseBtn = backPurchaseBtn.querySelectorAll(".next-btn")[0];
     purchaseBtn.addEventListener("click", function () {
         let totalPrice = calculateTotalAmount(itemDetail, items[itemNum].price);
         console.log(totalPrice);
+        console.log(userAccount);
     });
 
 
