@@ -1,4 +1,4 @@
-// 表示するページ
+// 表示するページを名前空間へ
 const config = {
     initialform: document.getElementById("initial-form"),
     gamePage: document.getElementById("gamePage"),
@@ -24,12 +24,23 @@ class UserGameAccount {
     // ハンバーガークリック時にクリック数と所持金を増やす
     bargerClick() {
         this.clickCount++;
-        // this.money += this.flipMachine;
         this.money += this.flipMachine;
     }
 
-    // バーガー焼き機の所持数でバーガークリック時の取得金額を計算
+    // 1秒毎に１日ずつ経過させて、365日経過で年齢を１増やす
+    daysElapsed(elm) {
+        setInterval(function () {
+            let year = 365;
+            let ageP = elm.querySelectorAll(".user-info-p")[1];
+            let daysP = elm.querySelectorAll(".user-info-p")[2];
+            this.days++;
+            daysP.innerHTML = `${this.days} days`;
 
+            if ((this.days !== 0) && ((this.days % year) === 0)) {
+                ageP.innerHTML = `${++this.age} yrs old`;
+            }
+        }.bind(this), 1000);
+    }
 }
 
 // 購入可能なアイテムクラス
@@ -46,9 +57,26 @@ class Item {
         this.price = price;
         this.owned = owned;
     }
+
+    // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
+    // everySecondMoreMoney(effect, owned) {
+    //     let effectNum = parseFloat(effect);
+    //     let ownedNum = parseInt(owned);
+    //     setInterval(function () {
+    //         if (Number.isInteger(effectNum)) {
+    //             console.log(effectNum * ownedNum);
+    //             // console.log('a');
+    //         } else {
+    //             effectNum;
+    //         }
+    //         // console.log("Running statements every second." + c);
+    //         // c++;
+    //         // if(typeof effect)
+    //     }, 1000);
+    // }
 }
 
-// 各アイテム（11種類のインスタンスを配列へ）
+// 各アイテム（11種類のアイテムインスタンスを配列へ）
 const items = [
     new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "1"),
     new Item("ETFStock", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0"),
@@ -63,7 +91,7 @@ const items = [
     new Item("BulletSpeedSkyRailway", "30,000,000,000", "https://4.bp.blogspot.com/-xeElVHnaO6E/UUhH-h33LkI/AAAAAAAAO6s/ZdByhm_3NRI/s1600/train_shinkansen.png", "不動産", "1", "毎秒30,000,000,000円を取得する", "10,000,000,000,000", "0"),
 ];
 
-// submitした名前からインスタンスを生成する関数
+// submitしたユーザーの名前からインスタンスを生成する関数
 function initializeUserAccount() {
     let userAccount = new UserGameAccount(
         document.getElementById("nameInput").value,
@@ -79,7 +107,7 @@ function initializeUserAccount() {
     config.gamePage.append(mainGamePage(userAccount));
 }
 
-// オブジェクトを受け取ってメインページを生成する関数
+// ユーザーオブジェクトを受け取ってメインページを生成する関数
 function mainGamePage(userAccount) {
 
     // 各divタグを生成して中身を入れる
@@ -111,11 +139,13 @@ function mainGamePage(userAccount) {
     `
         <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.name}</p>
         <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.age} yrs old</p>
-        <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.days} days</p>
+        <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.days} days</p>
         <p class="user-info-p bg-lightBlue col-5 m-1">¥${userAccount.money}</p>
     `;
 
-    // アイテムの表示ページ
+    userAccount.daysElapsed(userInfo);
+
+    // アイテムの表示カウント
     let page = 0;
     let itemDiv = 3;
 
@@ -137,6 +167,7 @@ function mainGamePage(userAccount) {
 
     // バーガークリック時にクリック回数と所持金を書き換える
     bargerImg.addEventListener("click", function () {
+        // クリックカウントを増やして所持金を追加する
         userAccount.bargerClick();
         let clickCounter = document.querySelectorAll(".counter")[0];
         clickCounter.innerHTML = `${userAccount.clickCount} Burgers`;
@@ -144,6 +175,8 @@ function mainGamePage(userAccount) {
         let moneyStr = document.querySelectorAll(".user-info-p")[3];
         moneyStr.innerHTML = `¥${userAccount.money}`;
     });
+
+    // userAccount.daysElapsed(userInfo);
 
     return container;
 }
@@ -284,19 +317,22 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
         if (userAccount.money >= totalPrice) {
             let inputValue = parseInt(itemDetail.querySelector("input").value);
             items[itemNum].owned = inputValue + parseInt(items[itemNum].owned);
-            config.gamePage.querySelectorAll(".user-info-p")[3].innerHTML =
+            document.querySelectorAll(".user-info-p")[3].innerHTML =
             `
                 ¥${userAccount.money -= totalPrice}
             `;
-            
-            userAccount.flipMachine = items[itemNum].effect * items[itemNum].owned;
-            config.gamePage.querySelector(".flip-total").innerHTML =
+
+            userAccount.flipMachine = items[0].effect * items[0].owned;
+            document.querySelector(".flip-total").innerHTML =
             `
                 ¥${userAccount.flipMachine} per second;
             `;
             console.log(userAccount.flipMachine);
             config.itemsList.innerHTML = "";
             itemsInfo(items, page, itemDiv, userAccount);
+
+            // userAccount.money += items[itemNum].everySecondMoreMoney(items[itemNum].effect, items[itemNum].owned);
+            // console.log(userAccount.money);
             // console.log(items[itemNum].owned);
             // console.log(items[itemNum]);
             // console.log(totalPrice);
@@ -331,3 +367,28 @@ function calculateTotalAmount(itemEle, price) {
     total = inputValue * priceNum;
     return total;
 }
+
+
+
+// console.log(parseFloat(items[1].effect));
+// console.log(items[0].everySecondMoreMoney());
+// console.log(300000 * 0.002);
+// let x = items[2].effect;
+// let z = items[3].effect;
+// let y = parseFloat(x);
+// let b = parseFloat(z);
+// console.log(typeof y);
+// console.log(y);
+// console.log(Number.isInteger(y));
+// console.log(Number.isInteger(b));
+
+// console.log(Math.floor((0.0007 * 2) * 300000));
+// console.log((300000 * 0.0007) * 3);
+// console.log((300000 * 0.001));
+// console.log(parseFloat("0.07%") * 0.01);
+// console.log((0.01 / 100) * 7);
+
+// let d = 365;
+// console.log(266450 % d);
+// console.log(0 % 365);
+// console.log(1 % 365);
