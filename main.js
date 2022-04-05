@@ -34,13 +34,25 @@ class UserGameAccount {
             let ageP = elm.querySelectorAll(".user-info-p")[1];
             let daysP = elm.querySelectorAll(".user-info-p")[2];
             this.days++;
-            daysP.innerHTML = `${this.days} days`;
+            daysP.innerHTML = `${this.days.toLocaleString()} days`;
 
             if ((this.days !== 0) && ((this.days % year) === 0)) {
                 ageP.innerHTML = `${++this.age} yrs old`;
             }
         }.bind(this), 1000);
     }
+
+    // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
+    everySecondMoreMoney(elm, item) {
+        setInterval(function () {
+            this.money += item.effect * item.owned;
+            elm.innerHTML = 
+            `
+                ¥${this.money.toLocaleString()}
+            `;
+        }.bind(this), 1000);
+    }
+
 }
 
 // 購入可能なアイテムクラス
@@ -59,13 +71,14 @@ class Item {
     }
 
     // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
-    // everySecondMoreMoney(effect, owned) {
+    // everySecondMoreMoney(userMoney, effect, owned) {
     //     let effectNum = parseFloat(effect);
     //     let ownedNum = parseInt(owned);
     //     setInterval(function () {
     //         if (Number.isInteger(effectNum)) {
-    //             console.log(effectNum * ownedNum);
-    //             // console.log('a');
+    //             userMoney += effectNum * ownedNum;
+    //             // console.log(effectNum * ownedNum);
+    //             console.log(userMoney);
     //         } else {
     //             effectNum;
     //         }
@@ -73,6 +86,29 @@ class Item {
     //         // c++;
     //         // if(typeof effect)
     //     }, 1000);
+    // }
+
+    // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
+    // everySecondMoreMoney(elm, money) {
+    //     setInterval(function () {
+    //         let total = 0;
+    //         total = this.effect * this.owned;
+    //         elm.innerHTML = 
+    //         `
+    //             ${money += this.effect * this.owned}
+    //         `;
+    //         console.log("total", total ,"money", money);
+    //         // ele += this.effect * this.owned;
+    //         // console.log(this.effect * this.owned);
+    //     }.bind(this), 1000);
+    // }
+    // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
+    // everySecondMoreMoney(money) {
+    //     setInterval(function () {
+    //         money += this.effect * this.owned;
+    //         console.log(this.effect * this.owned);
+    //         console.log(money);
+    //     }.bind(this), 1000);
     // }
 }
 
@@ -97,7 +133,7 @@ function initializeUserAccount() {
         document.getElementById("nameInput").value,
         20,
         0,
-        50000,
+        130000,
         0,
         25,
     );
@@ -173,7 +209,7 @@ function mainGamePage(userAccount) {
         clickCounter.innerHTML = `${userAccount.clickCount} Burgers`;
 
         let moneyStr = document.querySelectorAll(".user-info-p")[3];
-        moneyStr.innerHTML = `¥${userAccount.money}`;
+        moneyStr.innerHTML = `¥${userAccount.money.toLocaleString()}`;
     });
 
     // userAccount.daysElapsed(userInfo);
@@ -327,11 +363,27 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
             `
                 ¥${userAccount.flipMachine} per second;
             `;
-            console.log(userAccount.flipMachine);
+
+
+            if (items[itemNum].name != "flipMachine") {
+                let moneyP = document.querySelectorAll(".user-info-p")[3];
+
+                // items[itemNum].everySecondMoreMoney(moneyP, userAccount.money);
+                userAccount.everySecondMoreMoney(moneyP, items[itemNum]);
+            }
+            // if (items[itemNum].name != "flipMachine") {
+            //     document.querySelectorAll(".user-info-p")[3];
+
+            //     document.querySelectorAll(".user-info-p")[3].innerHTML =
+            //     `
+            //         ¥${items[itemNum].everySecondMoreMoney()};
+            //     `;
+            // }
+
             config.itemsList.innerHTML = "";
             itemsInfo(items, page, itemDiv, userAccount);
 
-            // userAccount.money += items[itemNum].everySecondMoreMoney(items[itemNum].effect, items[itemNum].owned);
+
             // console.log(userAccount.money);
             // console.log(items[itemNum].owned);
             // console.log(items[itemNum]);
