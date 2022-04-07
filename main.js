@@ -1,9 +1,14 @@
 // 表示するページを名前空間へ
 const config = {
-    initialform: document.getElementById("initial-form"),
-    gamePage: document.getElementById("gamePage"),
-    itemsList: document.createElement("div"),
+    initialform : document.getElementById("initial-form"),
+    gamePage : document.getElementById("gamePage"),
+    itemsList : document.createElement("div"),
 }
+
+// const saveData = {
+//     userSaveData : "",
+//     itemsSaveData : "",
+// }
 
 // 登録ユーザーの情報
 class UserGameAccount {
@@ -56,15 +61,18 @@ class UserGameAccount {
             } else {
                 amount = parseInt(item.effect);
             }
+
             // console.log(item.price)
-            setInterval(function () {
+            let timerID = setInterval(function () {
+
                 this.money += amount * parseInt(item.owned);
                 elm.innerHTML =
                     `
-                ¥${this.money.toLocaleString()}
-            `;
-                console.log(amount * parseInt(item.owned));
+                    ¥${this.money.toLocaleString()}
+                `;
+                console.log("everySecondMoreMoney", amount * parseInt(item.owned));
             }.bind(this), 1000);
+            return timerID;
         }
     }
 
@@ -154,7 +162,7 @@ class Item {
 
 // 各アイテム（11種類のアイテムインスタンスを配列へ）
 const items = [
-    new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "1"),
+    new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "1", false),
     new Item("ETFStock", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0", false),
     new Item("ETFBonds", "0.07%", "https://3.bp.blogspot.com/-q3fsc28YHhA/WkR92wRCAZI/AAAAAAABJVo/7R3S9tpX2W8VmcXV40c0NOCZ1Ch2bVgrACLcBGAs/s800/kabu_chart_man_happy.png", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0", false),
     new Item("LemonadeStand", "30", "https://1.bp.blogspot.com/-jWZ_H-M9Bbc/XDXbzDX4G9I/AAAAAAABREQ/ctF0S_EEmD47tNWMcLhFssNCteQquhWyQCLcBGAs/s800/lemonade_shop_boy.png", "不動産", "1000", "毎秒30円を取得する", "30,000", "0", false),
@@ -181,6 +189,89 @@ function initializeUserAccount() {
     config.initialform.classList.add("d-none");
     // オブジェクトを受け取って２ページ目を表示する
     config.gamePage.append(mainGamePage(userAccount));
+}
+
+// // ローカルストレージに保存したデータの呼び出し
+// function loadedUserAccount(account, saveItems) {
+//     let userAccount = new UserGameAccount(
+//         account.name,
+//         account.age,
+//         account.days,
+//         account.money,
+//         account.clickCount,
+//         account.flipMachine,
+//     );
+//     let items = saveItems;
+
+//     let itemsEle = document.querySelectorAll(".buy-item");
+
+//     config.gamePage.innerHTML = "";
+//     // オブジェクトを受け取って２ページ目を表示する
+//     config.gamePage.append(mainGamePage(userAccount));
+
+//     config.itemsList.innerHTML = "";
+
+//     // アイテムの表示カウント
+//     let page = 0;
+//     let itemDiv = 3;
+//     config.itemsList = itemsInfo(items, page, itemDiv, userAccount);
+
+//     let itemNum = parseInt(itemsEle.getAttribute("data-item-num"));
+//     console.log(itemNum);
+
+//     let moneyP = document.querySelectorAll(".user-info-p")[3];
+//     // console.log(moneyP);
+//     userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem);
+// }
+
+
+// ローカルストレージに保存したデータの呼び出し
+function loadedUserAccount(account, saveItems) {
+    let userAccount = new UserGameAccount(
+        account.name,
+        account.age,
+        account.days,
+        account.money,
+        account.clickCount,
+        account.flipMachine,
+    );
+    let items = saveItems;
+
+
+    config.gamePage.innerHTML = "";
+    // オブジェクトを受け取って２ページ目を表示する
+    config.gamePage.append(mainGamePage(userAccount));
+
+    config.itemsList.innerHTML = "";
+
+    // アイテムの表示カウント
+    let page = 0;
+    let itemDiv = 3;
+    config.itemsList = itemsInfo(items, page, itemDiv, userAccount);
+
+    let moneyP = document.querySelectorAll(".user-info-p")[3];
+    // console.log("clearInterval", userAccount.everySecondMoreMoney(moneyP, items, items.isItem));
+
+
+    for (let i = 0; i < items.length; i++){
+        // clearInterval(userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem));
+        // userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem);
+        // console.log(timerID);
+        // clearInterval(timerID);
+        // console.log(items[i]);
+        // userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem);
+        // console.log(items[i].name ,items[i].isItem);
+        // clearInterval(timerID);
+        // console.log(items[i].isItem);
+        if (items[i].isItem) {
+            // console.log(items[i].name);
+            // console.log(items[i].isItem);
+            items[i].isItem = false;
+            clearInterval(timerID);
+            userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem);
+        }
+    }
+    
 }
 
 // ユーザーオブジェクトを受け取ってメインページを生成する関数
@@ -233,6 +324,74 @@ function mainGamePage(userAccount) {
         <i class="fas fa-save fa-3x m-2 p-2"></i>
         <i class="fas fa-spinner fa-3x m-2 p-2"></i>
     `;
+
+    let saveBtn = saveResetIcon.querySelector(".fa-save");
+    saveBtn.addEventListener("click", function () {
+        console.log(userAccount);
+
+
+        // console.log(JSON.stringify(userAccount));
+        // console.log(JSON.stringify(items));
+        let jsonEncodedUser = JSON.stringify(userAccount);
+        console.log(jsonEncodedUser);
+        let jsonEncodedItems = JSON.stringify(items);
+
+        localStorage.setItem("userData", jsonEncodedUser);
+        localStorage.setItem("itemData", jsonEncodedItems);
+
+        // saveData.userSaveData = JSON.stringify(userAccount);
+        // saveData.itemsSaveData = JSON.stringify(items);
+
+
+        alert("データをセーブしました。");
+    });
+
+    let resetBtn = saveResetIcon.querySelector(".fa-spinner");
+    resetBtn.addEventListener("click", function () {
+
+        // clearInterval(userAccount.everySecondMoreMoney());
+        
+        // console.log(localStorage.getItem("userData"));
+        // console.log(localStorage.getItem("itemData"));
+        let jsonDecodedUser = localStorage.getItem("userData");
+        let jsonDecodedItems = localStorage.getItem("itemData");
+
+        let saveAccount = JSON.parse(jsonDecodedUser);
+        // let loadAccount = new UserGameAccount(
+        //     saveAccount.name,
+        //     saveAccount.age,
+        //     saveAccount.days,
+        //     saveAccount.money,
+        //     saveAccount.clickCount,
+        //     saveAccount.flipMachine,
+        // )
+
+        let itemsArr = JSON.parse(jsonDecodedItems);
+
+        for (let i = 0; i < itemsArr.length; i++){
+            items[i] = itemsArr[i];
+        }
+
+        loadedUserAccount(saveAccount, items);
+
+        // console.log("userAccount" ,userAccount);
+        // console.log("loadAccount", loadAccount);
+
+
+        // userAccount.daysElapsed(userInfo);
+        // console.log(items);
+
+        // userAccount = JSON.parse(jsonDecodedUser);
+        // items = JSON.parse(jsonDecodedItems);
+        // console.log(JSON.parse(jsonDecodedUser));
+        // console.log(JSON.parse(jsonDecodedItems));
+
+
+
+
+
+
+    });
 
 
     // 生成したdivタグに要素を追加していく
@@ -408,7 +567,8 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
                 let moneyP = document.querySelectorAll(".user-info-p")[3];
 
                 // items[itemNum].everySecondMoreMoney(moneyP, userAccount.money);
-                userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem);
+                timerID = userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem);
+                // console.log(timerID);
             }
             // if (items[itemNum].name != "flipMachine") {
             //     document.querySelectorAll(".user-info-p")[3];
