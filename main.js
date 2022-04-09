@@ -1,20 +1,21 @@
 // 表示するページを名前空間へ
 const config = {
-    initialform : document.getElementById("initial-form"),
-    gamePage : document.getElementById("gamePage"),
+    // 初期表示される名前入力ページ
+    initialform: document.getElementById("initial-form"),
+    // アイテム以外のメインのゲームページ
+    gamePage: document.getElementById("gamePage"),
+    // １つのページに表示するアイテムを入れるdivタグ
     itemsList : document.createElement("div"),
 }
 
-// const saveData = {
-//     userSaveData : "",
-//     itemsSaveData : "",
-// }
+// setIntervalの停止用のIDを格納する
+const timerID = {
+    day : 0,
+    amountMoney : 0,
+}
 
 // 登録ユーザーの情報
 class UserGameAccount {
-
-    // クラス変数
-    // flipMachine = 1 * 25;
 
     // コンストラクタ関数（名前、年齢、経過日数、所持金、クリック回数、所持アイテム数）
     constructor(name, age, days, money, clickCount, flipMachine) {
@@ -34,7 +35,9 @@ class UserGameAccount {
 
     // 1秒毎に１日ずつ経過させて、365日経過で年齢を１増やす
     daysElapsed(elm) {
-        setInterval(function () {
+
+        // clearIntervalでタイマーを停止させるためのtimerIDを取得
+        timerID.day = setInterval(function () {
             let year = 365;
             let ageP = elm.querySelectorAll(".user-info-p")[1];
             let daysP = elm.querySelectorAll(".user-info-p")[2];
@@ -48,7 +51,6 @@ class UserGameAccount {
     }
 
     // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
-    // 文字列のpriceを[,]を抜いた数値に変換する
     everySecondMoreMoney(elm, item, isItem) {
         if (isItem === false) {
             item.isItem = true;
@@ -62,8 +64,8 @@ class UserGameAccount {
                 amount = parseInt(item.effect);
             }
 
-            // console.log(item.price)
-            let timerID = setInterval(function () {
+            // clearIntervalでタイマーを停止させるためのtimerIDを取得
+            timerID.amountMoney = setInterval(function () {
 
                 this.money += amount * parseInt(item.owned);
                 elm.innerHTML =
@@ -72,33 +74,8 @@ class UserGameAccount {
                 `;
                 console.log("everySecondMoreMoney", amount * parseInt(item.owned));
             }.bind(this), 1000);
-            return timerID;
         }
     }
-
-
-    // // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
-    // // 文字列のpriceを[,]を抜いた数値に変換する
-    // everySecondMoreMoney(elm, item) {
-    //     let priceNum = parseInt(item.price.replace(/,/g, ""));
-    //     let amount = 0;
-    //     if (item.effect === "0.1%") {
-    //         amount = priceNum * 0.001;
-    //     } else if (item.effect === "0.07%") {
-    //         amount = priceNum * 0.0007;
-    //     } else {
-    //         amount = parseInt(item.effect);
-    //     }
-    //     // console.log(item.price)
-    //     setInterval(function () {
-    //         this.money += amount * parseInt(item.owned);
-    //         elm.innerHTML = 
-    //         `
-    //             ¥${this.money.toLocaleString()}
-    //         `;
-    //         console.log(amount * parseInt(item.owned));
-    //     }.bind(this), 1000);
-    // }
 
 }
 
@@ -118,46 +95,6 @@ class Item {
         this.isItem = isItem;
     }
 
-    // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
-    // everySecondMoreMoney(userMoney, effect, owned) {
-    //     let effectNum = parseFloat(effect);
-    //     let ownedNum = parseInt(owned);
-    //     setInterval(function () {
-    //         if (Number.isInteger(effectNum)) {
-    //             userMoney += effectNum * ownedNum;
-    //             // console.log(effectNum * ownedNum);
-    //             console.log(userMoney);
-    //         } else {
-    //             effectNum;
-    //         }
-    //         // console.log("Running statements every second." + c);
-    //         // c++;
-    //         // if(typeof effect)
-    //     }, 1000);
-    // }
-
-    // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
-    // everySecondMoreMoney(elm, money) {
-    //     setInterval(function () {
-    //         let total = 0;
-    //         total = this.effect * this.owned;
-    //         elm.innerHTML = 
-    //         `
-    //             ${money += this.effect * this.owned}
-    //         `;
-    //         console.log("total", total ,"money", money);
-    //         // ele += this.effect * this.owned;
-    //         // console.log(this.effect * this.owned);
-    //     }.bind(this), 1000);
-    // }
-    // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
-    // everySecondMoreMoney(money) {
-    //     setInterval(function () {
-    //         money += this.effect * this.owned;
-    //         console.log(this.effect * this.owned);
-    //         console.log(money);
-    //     }.bind(this), 1000);
-    // }
 }
 
 // 各アイテム（11種類のアイテムインスタンスを配列へ）
@@ -191,42 +128,10 @@ function initializeUserAccount() {
     config.gamePage.append(mainGamePage(userAccount));
 }
 
-// // ローカルストレージに保存したデータの呼び出し
-// function loadedUserAccount(account, saveItems) {
-//     let userAccount = new UserGameAccount(
-//         account.name,
-//         account.age,
-//         account.days,
-//         account.money,
-//         account.clickCount,
-//         account.flipMachine,
-//     );
-//     let items = saveItems;
-
-//     let itemsEle = document.querySelectorAll(".buy-item");
-
-//     config.gamePage.innerHTML = "";
-//     // オブジェクトを受け取って２ページ目を表示する
-//     config.gamePage.append(mainGamePage(userAccount));
-
-//     config.itemsList.innerHTML = "";
-
-//     // アイテムの表示カウント
-//     let page = 0;
-//     let itemDiv = 3;
-//     config.itemsList = itemsInfo(items, page, itemDiv, userAccount);
-
-//     let itemNum = parseInt(itemsEle.getAttribute("data-item-num"));
-//     console.log(itemNum);
-
-//     let moneyP = document.querySelectorAll(".user-info-p")[3];
-//     // console.log(moneyP);
-//     userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem);
-// }
-
 
 // ローカルストレージに保存したデータの呼び出し
-function loadedUserAccount(account, saveItems) {
+function loadedGamePage(account, saveItems) {
+    // 保存されているアカウント情報でインスタンスを生成
     let userAccount = new UserGameAccount(
         account.name,
         account.age,
@@ -235,13 +140,11 @@ function loadedUserAccount(account, saveItems) {
         account.clickCount,
         account.flipMachine,
     );
+    // 保存されているアイテムデータを配列へ
     let items = saveItems;
 
-
     config.gamePage.innerHTML = "";
-    // オブジェクトを受け取って２ページ目を表示する
     config.gamePage.append(mainGamePage(userAccount));
-
     config.itemsList.innerHTML = "";
 
     // アイテムの表示カウント
@@ -250,24 +153,13 @@ function loadedUserAccount(account, saveItems) {
     config.itemsList = itemsInfo(items, page, itemDiv, userAccount);
 
     let moneyP = document.querySelectorAll(".user-info-p")[3];
-    // console.log("clearInterval", userAccount.everySecondMoreMoney(moneyP, items, items.isItem));
 
 
     for (let i = 0; i < items.length; i++){
-        // clearInterval(userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem));
-        // userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem);
-        // console.log(timerID);
-        // clearInterval(timerID);
-        // console.log(items[i]);
-        // userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem);
-        // console.log(items[i].name ,items[i].isItem);
-        // clearInterval(timerID);
-        // console.log(items[i].isItem);
+        // 各アイテムのisItemを確認していき、trueの場合タイマーをリセットして再度タイマーをセットする
         if (items[i].isItem) {
-            // console.log(items[i].name);
-            // console.log(items[i].isItem);
             items[i].isItem = false;
-            clearInterval(timerID);
+            clearInterval(timerID.amountMoney);
             userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem);
         }
     }
@@ -326,71 +218,45 @@ function mainGamePage(userAccount) {
     `;
 
     let saveBtn = saveResetIcon.querySelector(".fa-save");
+    // セーブアイコンをクリック時、現在のオブジェクトの状態をjson文字列としてローカルストレージに保存
     saveBtn.addEventListener("click", function () {
-        console.log(userAccount);
 
-
-        // console.log(JSON.stringify(userAccount));
-        // console.log(JSON.stringify(items));
         let jsonEncodedUser = JSON.stringify(userAccount);
-        console.log(jsonEncodedUser);
         let jsonEncodedItems = JSON.stringify(items);
+
 
         localStorage.setItem("userData", jsonEncodedUser);
         localStorage.setItem("itemData", jsonEncodedItems);
-
-        // saveData.userSaveData = JSON.stringify(userAccount);
-        // saveData.itemsSaveData = JSON.stringify(items);
-
 
         alert("データをセーブしました。");
     });
 
     let resetBtn = saveResetIcon.querySelector(".fa-spinner");
+    // ロードボタンをクリック時、保存していたjson文字列をオブジェクトに変換して渡す
     resetBtn.addEventListener("click", function () {
+        // ローカルストレージにデータが保存されている場合、保存されているデータを呼び出す
+        if (localStorage.getItem("userData")) {
 
-        // clearInterval(userAccount.everySecondMoreMoney());
-        
-        // console.log(localStorage.getItem("userData"));
-        // console.log(localStorage.getItem("itemData"));
-        let jsonDecodedUser = localStorage.getItem("userData");
-        let jsonDecodedItems = localStorage.getItem("itemData");
+            // 起動済みのタイマーを停止する
+            clearInterval(timerID.day);
 
-        let saveAccount = JSON.parse(jsonDecodedUser);
-        // let loadAccount = new UserGameAccount(
-        //     saveAccount.name,
-        //     saveAccount.age,
-        //     saveAccount.days,
-        //     saveAccount.money,
-        //     saveAccount.clickCount,
-        //     saveAccount.flipMachine,
-        // )
+            let jsonDecodedUser = localStorage.getItem("userData");
+            let jsonDecodedItems = localStorage.getItem("itemData");
 
-        let itemsArr = JSON.parse(jsonDecodedItems);
+            let saveAccount = JSON.parse(jsonDecodedUser);
+            let itemsArr = JSON.parse(jsonDecodedItems);
 
-        for (let i = 0; i < itemsArr.length; i++){
-            items[i] = itemsArr[i];
+            for (let i = 0; i < itemsArr.length; i++) {
+                items[i] = itemsArr[i];
+            }
+
+            // ページの状態を保存した状態に復元する
+            loadedGamePage(saveAccount, items);
+
+            alert("データをロードしました。");
+        } else {
+            alert("データがありません");
         }
-
-        loadedUserAccount(saveAccount, items);
-
-        // console.log("userAccount" ,userAccount);
-        // console.log("loadAccount", loadAccount);
-
-
-        // userAccount.daysElapsed(userInfo);
-        // console.log(items);
-
-        // userAccount = JSON.parse(jsonDecodedUser);
-        // items = JSON.parse(jsonDecodedItems);
-        // console.log(JSON.parse(jsonDecodedUser));
-        // console.log(JSON.parse(jsonDecodedItems));
-
-
-
-
-
-
     });
 
 
@@ -411,8 +277,6 @@ function mainGamePage(userAccount) {
         moneyStr.innerHTML = `¥${userAccount.money.toLocaleString()}`;
     });
 
-    // userAccount.daysElapsed(userInfo);
-
     return container;
 }
 
@@ -421,8 +285,8 @@ function itemsInfo(items, page, itemDiv, userAccount) {
 
     let buyItemsInfo = document.createElement("div");
     buyItemsInfo.classList.add("buy-items-info", "flex-wrap", "d-flex", "justify-content-center", "flex-column");
+
     // ループでアイテムを３つ表示 (0,2)(3,5)(6,9) page = 0, itemDiv = 3
-    
     for (let i = page; i < items.length; i++) {
         if (i < itemDiv) {
             buyItemsInfo.innerHTML +=
@@ -453,12 +317,7 @@ function itemsInfo(items, page, itemDiv, userAccount) {
         <button type="button" class="next-btn col-3 btn btn-info">&gt;</button>
     `;
 
-
-    // ========= ここでいつも作成されるdivタグをどうにかする！！！！！！！！！ ===========
-    // let container = document.createElement("div");
-    // container.append(buyItemsInfo, itemSelectBtn);
     config.itemsList.append(buyItemsInfo, itemSelectBtn);
-
 
     // 各アイテムクリック時に詳細を表示
     let itemDetail = buyItemsInfo.querySelectorAll(".buy-item");
@@ -471,7 +330,7 @@ function itemsInfo(items, page, itemDiv, userAccount) {
 
 
     // 「<」ボタンを押した時に前の3つのアイテムを表示する
-    // 最初のページの場合は何もしない。
+    // 最初のページの場合は何もしない
     if (page !== 0) {
         let backBtn = itemSelectBtn.querySelectorAll(".back-btn")[0];
         backBtn.addEventListener("click", function () {
@@ -481,6 +340,7 @@ function itemsInfo(items, page, itemDiv, userAccount) {
     }
 
     // 「>」ボタンを押した時に次の3つのアイテムを表示する
+    // 最後のページの場合は何もしない
     if (itemDiv !== items.length + 1) {
         let nextBtn = itemSelectBtn.querySelectorAll(".next-btn")[0];
         nextBtn.addEventListener("click", function () {
@@ -494,6 +354,7 @@ function itemsInfo(items, page, itemDiv, userAccount) {
     return config.itemsList;
 }
 
+// 
 function itemDetailPage(item, page, itemDiv, userAccount) {
     let itemNum = parseInt(item.getAttribute("data-item-num"));
     let itemDetail = document.createElement("div");
@@ -552,9 +413,10 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
         if (userAccount.money >= totalPrice) {
             let inputValue = parseInt(itemDetail.querySelector("input").value);
             items[itemNum].owned = inputValue + parseInt(items[itemNum].owned);
+            userAccount.money -= totalPrice;
             document.querySelectorAll(".user-info-p")[3].innerHTML =
             `
-                ¥${userAccount.money -= totalPrice}
+                ¥${userAccount.money.toLocaleString()}
             `;
 
             userAccount.flipMachine = items[0].effect * items[0].owned;
@@ -566,28 +428,12 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
             if (items[itemNum].name !== "FlipMachine") {
                 let moneyP = document.querySelectorAll(".user-info-p")[3];
 
-                // items[itemNum].everySecondMoreMoney(moneyP, userAccount.money);
-                timerID = userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem);
-                // console.log(timerID);
+                userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem);
             }
-            // if (items[itemNum].name != "flipMachine") {
-            //     document.querySelectorAll(".user-info-p")[3];
-
-            //     document.querySelectorAll(".user-info-p")[3].innerHTML =
-            //     `
-            //         ¥${items[itemNum].everySecondMoreMoney()};
-            //     `;
-            // }
 
             config.itemsList.innerHTML = "";
             itemsInfo(items, page, itemDiv, userAccount);
 
-
-            // console.log(userAccount.money);
-            // console.log(items[itemNum].owned);
-            // console.log(items[itemNum]);
-            // console.log(totalPrice);
-            // console.log(userAccount);
         }
     });
 
@@ -618,28 +464,3 @@ function calculateTotalAmount(itemEle, price) {
     total = inputValue * priceNum;
     return total;
 }
-
-
-
-// console.log(parseFloat(items[1].effect));
-// console.log(items[0].everySecondMoreMoney());
-// console.log(300000 * 0.002);
-// let x = items[2].effect;
-// let z = items[3].effect;
-// let y = parseFloat(x);
-// let b = parseFloat(z);
-// console.log(typeof y);
-// console.log(y);
-// console.log(Number.isInteger(y));
-// console.log(Number.isInteger(b));
-
-// console.log(Math.floor((0.0007 * 2) * 300000));
-// console.log((300000 * 0.0007) * 3);
-// console.log((300000 * 0.001));
-// console.log(parseFloat("0.07%") * 0.01);
-// console.log((0.01 / 100) * 7);
-
-// let d = 365;
-// console.log(266450 % d);
-// console.log(0 % 365);
-// console.log(1 % 365);
