@@ -122,12 +122,12 @@ function initializeUserAccount() {
         0,
         25,
     );
+
     // submitされたら１ページ目を非表示にする
     config.initialform.classList.add("d-none");
     // オブジェクトを受け取って２ページ目を表示する
     config.gamePage.append(mainGamePage(userAccount));
 }
-
 
 // ローカルストレージに保存したデータの呼び出し
 function loadedGamePage(account, saveItems) {
@@ -154,7 +154,6 @@ function loadedGamePage(account, saveItems) {
 
     let moneyP = document.querySelectorAll(".user-info-p")[3];
 
-
     for (let i = 0; i < items.length; i++){
         // 各アイテムのisItemを確認していき、trueの場合タイマーをリセットして再度タイマーをセットする
         if (items[i].isItem) {
@@ -163,8 +162,33 @@ function loadedGamePage(account, saveItems) {
             userAccount.everySecondMoreMoney(moneyP, items[i], items[i].isItem);
         }
     }
-    
 }
+
+// 初期表示ページのログインを押した時に画面を前回の保存状態へ戻す
+function login() {
+    if (localStorage.getItem("userData")) {
+
+        let jsonDecodedUser = localStorage.getItem("userData");
+        let jsonDecodedItems = localStorage.getItem("itemData");
+
+        let saveAccount = JSON.parse(jsonDecodedUser);
+        let itemsArr = JSON.parse(jsonDecodedItems);
+
+        for (let i = 0; i < itemsArr.length; i++) {
+            items[i] = itemsArr[i];
+        }
+
+        config.initialform.classList.add("d-none");
+        // ページの状態を保存した状態に復元する
+        loadedGamePage(saveAccount, itemsArr);
+
+        alert("データをロードしました。");
+
+        } else {
+            alert("データが保存されていません。");
+        }
+    };
+
 
 // ユーザーオブジェクトを受け取ってメインページを生成する関数
 function mainGamePage(userAccount) {
@@ -199,7 +223,7 @@ function mainGamePage(userAccount) {
         <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.name}</p>
         <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.age} yrs old</p>
         <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.days} days</p>
-        <p class="user-info-p bg-lightBlue col-5 m-1">¥${userAccount.money}</p>
+        <p class="user-info-p bg-lightBlue col-5 m-1">¥${userAccount.money.toLocaleString()}</p>
     `;
 
     userAccount.daysElapsed(userInfo);
@@ -255,7 +279,7 @@ function mainGamePage(userAccount) {
 
             alert("データをロードしました。");
         } else {
-            alert("データがありません");
+            alert("データが保存されていません。");
         }
     });
 
