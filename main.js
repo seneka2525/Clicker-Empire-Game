@@ -51,23 +51,42 @@ class UserGameAccount {
     }
 
     // 秒毎に所持金が増えるアイテムを所持した時、所持金を増やす
-    everySecondMoreMoney(elm, item, isItem) {
-        if (isItem === false) {
-            item.isItem = true;
-            let priceNum = parseInt(item.price.replace(/,/g, ""));
-            let amount = 0;
-            if (item.effect === "0.1%") {
-                amount = priceNum * 0.001;
+    everySecondMoreMoney(elm, item, isItem, value) {
+
+        let priceNum = parseInt(item.price.replace(/,/g, ""));
+        let addPrice = 0;
+        let amount = 0;
+        debugger;
+        if (item.effect === "0.1%") {
+            
+            if (value === 1) {
+                addPrice = Math.floor(priceNum * Math.pow(1.1, 1));
+            } else if(value > 1) {
+                addPrice = Math.floor(priceNum * Math.pow(1.1, item.owned));
+            } else if (value === undefined) {
+                addPrice = priceNum;
+            }
+            amount = item.etfTotal * 0.001;
+            item.price = addPrice.toLocaleString();
+            console.log("amount", amount);
+
             } else if (item.effect === "0.07%") {
                 amount = priceNum * 0.0007;
             } else {
                 amount = parseInt(item.effect);
             }
 
+        if (isItem === false) {
+            item.isItem = true;
             // clearIntervalでタイマーを停止させるためのtimerIDを取得
             timerID.amountMoney = setInterval(function () {
-
-                this.money += amount * parseInt(item.owned);
+                if (item.name === "ETFStock" || item.name === "ETFBonds") {
+                    this.money += item.etfTotal * 0.001;
+                    console.log(item.etfTotal * 0.001)
+                    console.log("amo", amount);
+                } else {
+                    this.money += amount * parseInt(item.owned);
+                }
                 elm.innerHTML =
                     `
                     ¥${this.money.toLocaleString()}
@@ -83,7 +102,7 @@ class UserGameAccount {
 class Item {
 
     // コンストラクタ関数(名前、効果、画像、タイプ、最大購入数、説明、値段、所持数)
-    constructor(name, effect, img, type, maxPurchases, description, price, owned, isItem) {
+    constructor(name, effect, img, type, maxPurchases, description, price, owned, isItem, etfTotal) {
         this.name = name;
         this.effect = effect;
         this.img = img;
@@ -93,6 +112,8 @@ class Item {
         this.price = price;
         this.owned = owned;
         this.isItem = isItem;
+        this.etfTotal = etfTotal;
+
     }
 
 }
@@ -100,8 +121,8 @@ class Item {
 // 各アイテム（11種類のアイテムインスタンスを配列へ）
 const items = [
     new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "1", false),
-    new Item("ETFStock", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0", false),
-    new Item("ETFBonds", "0.07%", "https://3.bp.blogspot.com/-q3fsc28YHhA/WkR92wRCAZI/AAAAAAABJVo/7R3S9tpX2W8VmcXV40c0NOCZ1Ch2bVgrACLcBGAs/s800/kabu_chart_man_happy.png", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0", false),
+    new Item("ETFStock", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0", false,0),
+    new Item("ETFBonds", "0.07%", "https://3.bp.blogspot.com/-q3fsc28YHhA/WkR92wRCAZI/AAAAAAABJVo/7R3S9tpX2W8VmcXV40c0NOCZ1Ch2bVgrACLcBGAs/s800/kabu_chart_man_happy.png", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0", false,0),
     new Item("LemonadeStand", "30", "https://1.bp.blogspot.com/-jWZ_H-M9Bbc/XDXbzDX4G9I/AAAAAAABREQ/ctF0S_EEmD47tNWMcLhFssNCteQquhWyQCLcBGAs/s800/lemonade_shop_boy.png", "不動産", "1000", "毎秒30円を取得する", "30,000", "0", false),
     new Item("IcecreamTruck", "120", "https://2.bp.blogspot.com/-IDJ-PAml6xI/UvTd5BRmybI/AAAAAAAAdf8/qkKtOM235yw/s800/job_icecream_ya.png", "不動産", "500", "毎秒120円を取得する", "100,000", "0", false),
     new Item("House", "32,000", "https://1.bp.blogspot.com/-RE_LtIhPBps/VCOJt4M6ZEI/AAAAAAAAm1k/WGvtkInZP9s/s800/house_reform.png", "不動産", "100", "毎秒32,000円を取得する", "20,000,000", "0", false),
@@ -118,7 +139,7 @@ function initializeUserAccount() {
         document.getElementById("nameInput").value,
         20,
         0,
-        600000,
+        630000,
         0,
         25,
     );
@@ -433,8 +454,13 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
     // アイテム詳細からPurchaseボタンを押した時
     let purchaseBtn = backPurchaseBtn.querySelectorAll(".next-btn")[0];
     purchaseBtn.addEventListener("click", function () {
+        // アイテムの個数と金額を計算
         let totalPrice = calculateTotalAmount(itemDetail, items[itemNum].price);
+
+        items[itemNum].etfTotal += totalPrice;
+        // 所持金が購入金額以上の場合
         if (userAccount.money >= totalPrice) {
+            
             let inputValue = parseInt(itemDetail.querySelector("input").value);
             items[itemNum].owned = inputValue + parseInt(items[itemNum].owned);
             userAccount.money -= totalPrice;
@@ -448,20 +474,19 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
             `
                 ¥${userAccount.flipMachine} per second;
             `;
-
             if (items[itemNum].name !== "FlipMachine") {
                 let moneyP = document.querySelectorAll(".user-info-p")[3];
 
-                userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem);
+                userAccount.everySecondMoreMoney(moneyP, items[itemNum], items[itemNum].isItem, inputValue);
             }
 
             config.itemsList.innerHTML = "";
             itemsInfo(items, page, itemDiv, userAccount);
 
+        } else {
+            alert("所持金が不足しています。");
         }
     });
-
-
     return itemDetail;
 }
 
@@ -480,11 +505,31 @@ function purchaseWrap(itemDetailEle, itemNum) {
     return itemDetailEle;
 }
 
+
+
+
 // アイテム詳細でトータル金額を計算する関数
 function calculateTotalAmount(itemEle, price) {
+    let itemName = itemEle.querySelectorAll("p")[0].innerHTML;
     let inputValue = parseInt(itemEle.querySelector("input").value);
     let total = 0;
     let priceNum = parseInt(price.replace(/,/g, ""));
-    total = inputValue * priceNum;
-    return total;
+    if (itemName === "ETFStock" && inputValue <= 1) {
+
+        total = inputValue * priceNum;
+        return total;
+    } else if (itemName === "ETFStock" && inputValue > 1) {
+
+        let currPrice = 0;
+        let amount = 0;
+        for (let i = 1; i < inputValue; i++){
+            currPrice = Math.floor(priceNum * Math.pow(1.1, [i]));
+            amount += currPrice;
+        }
+        total = priceNum + amount;
+        return total;
+    } else {
+        total = inputValue * priceNum;
+        return total;
+    }
 }
