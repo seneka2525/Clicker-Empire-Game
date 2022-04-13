@@ -55,9 +55,8 @@ class UserGameAccount {
 
         let priceNum = parseInt(item.price.replace(/,/g, ""));
         let addPrice = 0;
-        let amount = 0;
-        debugger;
-        if (item.effect === "0.1%") {
+        let rate = 0;
+        if (item.name === "ETFStock") {
             
             if (value === 1) {
                 addPrice = Math.floor(priceNum * Math.pow(1.1, 1));
@@ -66,32 +65,30 @@ class UserGameAccount {
             } else if (value === undefined) {
                 addPrice = priceNum;
             }
-            amount = item.etfTotal * 0.001;
+            rate = 0.001;
             item.price = addPrice.toLocaleString();
-            console.log("amount", amount);
 
-            } else if (item.effect === "0.07%") {
-                amount = priceNum * 0.0007;
+            } else if (item.name === "ETFBonds") {
+                rate = 0.0007;
             } else {
-                amount = parseInt(item.effect);
+                rate = parseInt(item.effect);
             }
 
         if (isItem === false) {
             item.isItem = true;
             // clearIntervalでタイマーを停止させるためのtimerIDを取得
             timerID.amountMoney = setInterval(function () {
-                if (item.name === "ETFStock" || item.name === "ETFBonds") {
-                    this.money += item.etfTotal * 0.001;
-                    console.log(item.etfTotal * 0.001)
-                    console.log("amo", amount);
+                if (item.name === "ETFStock") {
+                    this.money += item.etfTotal * rate;
+                } else if (item.name === "ETFBonds") {
+                    this.money += item.etfTotal * rate;
                 } else {
-                    this.money += amount * parseInt(item.owned);
+                    this.money += rate * parseInt(item.owned);
                 }
                 elm.innerHTML =
                     `
                     ¥${this.money.toLocaleString()}
                 `;
-                console.log("everySecondMoreMoney", amount * parseInt(item.owned));
             }.bind(this), 1000);
         }
     }
@@ -399,7 +396,7 @@ function itemsInfo(items, page, itemDiv, userAccount) {
     return config.itemsList;
 }
 
-// 
+// 各アイテムをクリックした時にアイテム詳細画面を表示する
 function itemDetailPage(item, page, itemDiv, userAccount) {
     let itemNum = parseInt(item.getAttribute("data-item-num"));
     let itemDetail = document.createElement("div");
