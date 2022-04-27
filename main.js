@@ -139,7 +139,7 @@ function initializeUserAccount() {
             userName,
             20,
             0,
-            630000,
+            50000,
             0,
             25,
         );
