@@ -132,19 +132,25 @@ const items = [
 
 // submitしたユーザーの名前からインスタンスを生成する関数
 function initializeUserAccount() {
-    let userAccount = new UserGameAccount(
-        document.getElementById("nameInput").value,
-        20,
-        0,
-        630000,
-        0,
-        25,
-    );
+    let userName = document.getElementById("nameInput").value;
 
-    // submitされたら１ページ目を非表示にする
-    config.initialform.classList.add("d-none");
-    // オブジェクトを受け取って２ページ目を表示する
-    config.gamePage.append(mainGamePage(userAccount));
+    if (userName != "") {
+        let userAccount = new UserGameAccount(
+            userName,
+            20,
+            0,
+            630000,
+            0,
+            25,
+        );
+
+        // submitされたら１ページ目を非表示にする
+        config.initialform.classList.add("d-none");
+        // オブジェクトを受け取って２ページ目を表示する
+        config.gamePage.append(mainGamePage(userAccount));
+    } else {
+        alert("入力必須です");
+    }
 }
 
 // ローカルストレージに保存したデータの呼び出し
