@@ -132,9 +132,11 @@ const items = [
 
 // submitしたユーザーの名前からインスタンスを生成する関数
 function initializeUserAccount() {
-    let userName = document.getElementById("nameInput").value;
+    let errMsg = document.querySelector(".help-block");
+    let nameForm = document.getElementById("name-input");
+    let userName = nameForm.value;
 
-    if (userName != "") {
+    if (userName !== "") {
         let userAccount = new UserGameAccount(
             userName,
             20,
@@ -149,7 +151,7 @@ function initializeUserAccount() {
         // オブジェクトを受け取って２ページ目を表示する
         config.gamePage.append(mainGamePage(userAccount));
     } else {
-        alert("入力必須です");
+        errMsg.innerHTML = "＊入力必須です";
     }
 }
 
@@ -219,7 +221,7 @@ function mainGamePage(userAccount) {
 
     // 各divタグを生成して中身を入れる
     let container = document.createElement("div");
-    container.classList.add("bg-lightBlue", "col-md-9", "col-xs-10", "text-center", "text-white", "d-flex", "p-3");
+    container.classList.add("bg-lightBlue", "col-lg-10", "col-md-12", "text-center", "text-white", "d-flex", "p-3");
 
     let leftContents = document.createElement("div");
     leftContents.classList.add("left-contents", "bg-darkBlue", "d-flex", "flex-wrap", "flex-column", "col-4", "p-2", "mr-2");
@@ -365,7 +367,8 @@ function itemsInfo(items, page, itemDiv, userAccount) {
         <button type="button" class="next-btn col-3 btn btn-info">&gt;</button>
     `;
 
-    config.itemsList.append(buyItemsInfo, itemSelectBtn);
+    config.itemsList.append(buyItemsInfo); // どこでボタンが入った？
+
 
     // 各アイテムクリック時に詳細を表示
     let itemDetail = buyItemsInfo.querySelectorAll(".buy-item");
@@ -397,7 +400,7 @@ function itemsInfo(items, page, itemDiv, userAccount) {
         });
     }
 
-    buyItemsInfo.append(itemSelectBtn);
+    config.itemsList.append(itemSelectBtn);
 
     return config.itemsList;
 }

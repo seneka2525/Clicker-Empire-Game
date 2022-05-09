@@ -14,7 +14,9 @@
     <div id="target" class="d-flex justify-content-center align-items-center vh-100">
         <div id="initial-form" class="p-3 bg-white col-md-5">
             <h3 class="mb-3">Clicker Empire Game</h3>
-            <input id="nameInput" type="text" class="col-12 mb-4" placeholder="お名前を入力してください">
+            <label>name：<span class="help-block"></span>
+                <input id="name-input" type="text" class="col-12 mb-4">
+            </label>
             <div class="start-btn justify-content-between d-flex">
                 <button class="btn btn-primary col-5 py-1 new-btn" onclick="initializeUserAccount(); event.preventDefault()">New</button>
                 <button class="btn btn-primary col-5 py-1 Login-btn" onclick="login();">Login</button>
