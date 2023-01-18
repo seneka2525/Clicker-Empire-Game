@@ -7,24 +7,36 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/acff8b78db.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <meta name=”viewport” content=”width=device-width, initial-scale=1.0″>
     <title>Clicker Empire Game</title>
 </head>
 <body>
     <!-- 1ページ目 -->
-    <div id="target" class="d-flex justify-content-center align-items-center vh-100">
-        <div id="initial-form" class="p-3 bg-white col-md-5">
-            <h3 class="mb-3">Clicker Empire Game</h3>
-            <label>name：<span class="help-block"></span>
-                <input id="name-input" type="text" class="col-12 mb-4">
-            </label>
-            <div class="start-btn justify-content-between d-flex">
-                <button class="btn btn-primary col-5 py-1 new-btn" onclick="initializeUserAccount(); event.preventDefault()">New</button>
-                <button class="btn btn-primary col-5 py-1 Login-btn" onclick="login();">Login</button>
-            </div>
+    <div id="discription-wrap">
+        <div id="discription" class="text-center">
+            <h3>ゲーム説明</h3>
+            <p>・ゲームの目的は、一攫千金を目指し、街に帝国を築くことです。</p>
+            <p>・ユーザーは20歳からスタートし、1秒経過ごとに1日ずつ進んで365日経過すると年齢が加算されます。</p>
+            <p>・ハンバーガーをクリックするとグリル所持数に応じて資金が増えます。</p>
+            <p>・獲得した資金でアイテムを購入して資金を増やしていきます。</p>
+            <p>・下部の左側にあるディスクアイコンをクリックするとローカルストレージに現状のデータを保存できます。</p>
+            <p>・下部の右側にあるロードアイコンをクリックするとローカルストレージに保存されたデータを読み込みます。</p>
         </div>
+        <div id="target" class="d-flex justify-content-center align-items-center">
+            <div id="initial-form" class="p-3 bg-white col-md-5">
+                <h3 class="mb-3">Clicker Empire Game</h3>
+                <label>名前：<span class="help-block"></span>
+                    <input id="name-input" type="text" class="col-12 mb-4" value="test">
+                </label>
+                <div class="start-btn justify-content-between d-flex">
+                    <button class="btn btn-primary col-5 py-1 new-btn" onclick="initializeUserAccount(); event.preventDefault()">ゲームスタート</button>
+                    <button class="btn btn-primary col-5 py-1 Login-btn" onclick="login();">データロード</button>
+                </div>
+            </div>
 
-        <!-- 2ページ目 -->
-        <div id="gamePage" class="d-flex justify-content-center">
+            <!-- 2ページ目 -->
+            <div id="gamePage" class="d-md-flex justify-content-center">
+            </div>
         </div>
     </div>
     <script src="main.js"></script>

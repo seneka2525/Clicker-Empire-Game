@@ -8,6 +8,8 @@ const config = {
     itemsList : document.createElement("div"),
 }
 
+
+
 // setIntervalの停止用のIDを格納する
 const timerID = {
     day : 0,
@@ -42,10 +44,10 @@ class UserGameAccount {
             let ageP = elm.querySelectorAll(".user-info-p")[1];
             let daysP = elm.querySelectorAll(".user-info-p")[2];
             this.days++;
-            daysP.innerHTML = `${this.days.toLocaleString()} days`;
+            daysP.innerHTML = `${this.days.toLocaleString()}日 経過`;
 
             if ((this.days !== 0) && ((this.days % year) === 0)) {
-                ageP.innerHTML = `${++this.age} yrs old`;
+                ageP.innerHTML = `${++this.age} 歳`;
             }
         }.bind(this), 1000);
     }
@@ -117,17 +119,17 @@ class Item {
 
 // 各アイテム（11種類のアイテムインスタンスを配列へ）
 const items = [
-    new Item("FlipMachine", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとに25円を取得する", "15,000", "1", false),
-    new Item("ETFStock", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0", false,0),
-    new Item("ETFBonds", "0.07%", "https://3.bp.blogspot.com/-q3fsc28YHhA/WkR92wRCAZI/AAAAAAABJVo/7R3S9tpX2W8VmcXV40c0NOCZ1Ch2bVgrACLcBGAs/s800/kabu_chart_man_happy.png", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0", false,0),
-    new Item("LemonadeStand", "30", "https://1.bp.blogspot.com/-jWZ_H-M9Bbc/XDXbzDX4G9I/AAAAAAABREQ/ctF0S_EEmD47tNWMcLhFssNCteQquhWyQCLcBGAs/s800/lemonade_shop_boy.png", "不動産", "1000", "毎秒30円を取得する", "30,000", "0", false),
-    new Item("IcecreamTruck", "120", "https://2.bp.blogspot.com/-IDJ-PAml6xI/UvTd5BRmybI/AAAAAAAAdf8/qkKtOM235yw/s800/job_icecream_ya.png", "不動産", "500", "毎秒120円を取得する", "100,000", "0", false),
-    new Item("House", "32,000", "https://1.bp.blogspot.com/-RE_LtIhPBps/VCOJt4M6ZEI/AAAAAAAAm1k/WGvtkInZP9s/s800/house_reform.png", "不動産", "100", "毎秒32,000円を取得する", "20,000,000", "0", false),
-    new Item("TownHouse", "64,000", "https://1.bp.blogspot.com/-AnmpceWlLCQ/UgsvKuxswbI/AAAAAAAAXRE/wXGzSvKzMqE/s800/solar_panel.png", "不動産", "100", "毎秒64,000円を取得する", "40,000,000", "0", false),
-    new Item("Mansion", "500,000", "https://2.bp.blogspot.com/-mcBTpFJvFNo/WeAFbqrzyHI/AAAAAAABHjQ/5cGZy_hvgtwumLbyggYibhxmj7lunDhwACLcBGAs/s800/building_mansion2.png", "不動産", "20", "毎秒500,000円を取得する", "250,000,000", "0", false),
-    new Item("industrialSpace", "2,200,000", "https://4.bp.blogspot.com/-X6Y32Uh5ud4/W_UF70_iobI/AAAAAAABQT0/gF3Braf7peIkKgr_MWRSRz_RuCR4wMnsACLcBGAs/s800/building_koujou_entotsu.png", "不動産", "10", "毎秒2,200,000円を取得する", "1,000,000,000", "0", false),
-    new Item("HotelSkyscraper", "25,000,000", "https://3.bp.blogspot.com/-qbqb7xIicEA/VpjCnDpHkfI/AAAAAAAA3EE/8NqVEr8MMxQ/s800/kousou_hotel.png", "不動産", "5", "毎秒25,000,000円を取得する", "10,000,000,000", "0", false),
-    new Item("BulletSpeedSkyRailway", "30,000,000,000", "https://4.bp.blogspot.com/-xeElVHnaO6E/UUhH-h33LkI/AAAAAAAAO6s/ZdByhm_3NRI/s1600/train_shinkansen.png", "不動産", "1", "毎秒30,000,000,000円を取得する", "10,000,000,000,000", "0", false),
+    new Item("バーガーグリル", "25", "https://1.bp.blogspot.com/-Bw5ZckDs9X8/XdttVGl2K5I/AAAAAAABWG4/ySICN6pGG68DXOA3iGg6OehjhfY4UYzwACNcBGAsYHQ/s1600/cooking_camp_bbq_grill.png", "オプション", "500", "バーガーをクリックごとにグリルの所持数 × 25円を取得する", "15,000", "1", false),
+    new Item("ETF", "0.1%", "https://4.bp.blogspot.com/-wiuuXIr7ee4/WdyEAs1h1YI/AAAAAAABHhg/nxShr_q4eCM8TROul3l7OnQqeVBFdI2wQCLcBGAs/s800/toushika_kabunushi_happy.png", "投資", "∞", "ETF銘柄の購入分をまとめて加算し、毎秒 0.1%を取得する", "300,000", "0", false,0),
+    new Item("債券", "0.07%", "https://3.bp.blogspot.com/-q3fsc28YHhA/WkR92wRCAZI/AAAAAAABJVo/7R3S9tpX2W8VmcXV40c0NOCZ1Ch2bVgrACLcBGAs/s800/kabu_chart_man_happy.png", "投資", "∞", "債権ETFの購入分をまとめて加算し、毎秒 0.07%を取得する", "300,000", "0", false,0),
+    new Item("レモネード店", "30", "https://1.bp.blogspot.com/-jWZ_H-M9Bbc/XDXbzDX4G9I/AAAAAAABREQ/ctF0S_EEmD47tNWMcLhFssNCteQquhWyQCLcBGAs/s800/lemonade_shop_boy.png", "不動産", "1000", "毎秒30円を取得する", "30,000", "0", false),
+    new Item("アイスクリーム店", "120", "https://2.bp.blogspot.com/-IDJ-PAml6xI/UvTd5BRmybI/AAAAAAAAdf8/qkKtOM235yw/s800/job_icecream_ya.png", "不動産", "500", "毎秒120円を取得する", "100,000", "0", false),
+    new Item("一軒家", "32,000", "https://1.bp.blogspot.com/-RE_LtIhPBps/VCOJt4M6ZEI/AAAAAAAAm1k/WGvtkInZP9s/s800/house_reform.png", "不動産", "100", "毎秒32,000円を取得する", "20,000,000", "0", false),
+    new Item("アパート", "64,000", "https://1.bp.blogspot.com/-AnmpceWlLCQ/UgsvKuxswbI/AAAAAAAAXRE/wXGzSvKzMqE/s800/solar_panel.png", "不動産", "100", "毎秒64,000円を取得する", "40,000,000", "0", false),
+    new Item("マンション", "500,000", "https://2.bp.blogspot.com/-mcBTpFJvFNo/WeAFbqrzyHI/AAAAAAABHjQ/5cGZy_hvgtwumLbyggYibhxmj7lunDhwACLcBGAs/s800/building_mansion2.png", "不動産", "20", "毎秒500,000円を取得する", "250,000,000", "0", false),
+    new Item("工業地帯", "2,200,000", "https://4.bp.blogspot.com/-X6Y32Uh5ud4/W_UF70_iobI/AAAAAAABQT0/gF3Braf7peIkKgr_MWRSRz_RuCR4wMnsACLcBGAs/s800/building_koujou_entotsu.png", "不動産", "10", "毎秒2,200,000円を取得する", "1,000,000,000", "0", false),
+    new Item("高層ホテル", "25,000,000", "https://3.bp.blogspot.com/-qbqb7xIicEA/VpjCnDpHkfI/AAAAAAAA3EE/8NqVEr8MMxQ/s800/kousou_hotel.png", "不動産", "5", "毎秒25,000,000円を取得する", "10,000,000,000", "0", false),
+    new Item("新幹線", "30,000,000,000", "https://4.bp.blogspot.com/-xeElVHnaO6E/UUhH-h33LkI/AAAAAAAAO6s/ZdByhm_3NRI/s1600/train_shinkansen.png", "不動産", "1", "毎秒30,000,000,000円を取得する", "10,000,000,000,000", "0", false),
 ];
 
 // submitしたユーザーの名前からインスタンスを生成する関数
@@ -148,6 +150,8 @@ function initializeUserAccount() {
 
         // submitされたら１ページ目を非表示にする
         config.initialform.classList.add("d-none");
+        document.getElementById("discription").classList.add("d-none");
+        document.getElementById("target").style.height = "100vh";
         // オブジェクトを受け取って２ページ目を表示する
         config.gamePage.append(mainGamePage(userAccount));
     } else {
@@ -221,17 +225,17 @@ function mainGamePage(userAccount) {
 
     // 各divタグを生成して中身を入れる
     let container = document.createElement("div");
-    container.classList.add("bg-lightBlue", "col-lg-10", "col-md-12", "text-center", "text-white", "d-flex", "p-3");
+    container.classList.add("bg-lightBlue", "col-lg-10", "col-md-12", "text-center", "text-white", "d-md-flex", "p-3");
 
     let leftContents = document.createElement("div");
-    leftContents.classList.add("left-contents", "bg-darkBlue", "d-flex", "flex-wrap", "flex-column", "col-4", "p-2", "mr-2");
+    leftContents.classList.add("left-contents", "bg-darkBlue", "d-flex", "flex-wrap", "flex-column", "col-md-4", "p-2", "mr-md-2");
 
     let bargerWrap = document.createElement("div");
     bargerWrap.classList.add("bargerWrap", "bg-lightBlue", "mb-5");
     bargerWrap.innerHTML =
     `
-        <p class="counter font-l">${userAccount.clickCount} Burgers</p>
-        <p class="flip-total">¥${userAccount.flipMachine} per second</p>
+        <p class="counter font-l">${userAccount.clickCount} バーガー</p>
+        <p class="flip-total">¥${userAccount.flipMachine} 獲得</p>
     `;
 
     // バーガーの画像
@@ -240,15 +244,15 @@ function mainGamePage(userAccount) {
     bargerImg.setAttribute("src", "https://1.bp.blogspot.com/-ccmRa-W5FdQ/WGnPWhQSnzI/AAAAAAABA4w/krKcel6z1hobC87K1Vj9bG_Me_AfBo15QCLcB/s800/hamburger_teriyaki_burger.png");
 
     let rightContents = document.createElement("div");
-    rightContents.classList.add("right-contents", "col-8", "bg-darkBlue");
+    rightContents.classList.add("right-contents", "col-md-8", "bg-darkBlue");
 
     let userInfo = document.createElement("div");
     userInfo.classList.add("user-info", "d-flex", "flex-wrap", "justify-content-center");
     userInfo.innerHTML =
     `
         <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.name}</p>
-        <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.age} yrs old</p>
-        <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.days} days</p>
+        <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.age} 歳</p>
+        <p class="user-info-p bg-lightBlue col-5 m-1">${userAccount.days}日 経過</p>
         <p class="user-info-p bg-lightBlue col-5 m-1">¥${userAccount.money.toLocaleString()}</p>
     `;
 
@@ -321,7 +325,7 @@ function mainGamePage(userAccount) {
         // クリックカウントを増やして所持金を追加する
         userAccount.bargerClick();
         let clickCounter = document.querySelectorAll(".counter")[0];
-        clickCounter.innerHTML = `${userAccount.clickCount} Burgers`;
+        clickCounter.innerHTML = `${userAccount.clickCount} バーガー`;
 
         let moneyStr = document.querySelectorAll(".user-info-p")[3];
         moneyStr.innerHTML = `¥${userAccount.money.toLocaleString()}`;
@@ -348,7 +352,7 @@ function itemsInfo(items, page, itemDiv, userAccount) {
                     <p class="m-0">¥${items[i].price}</p>
                 </div>
                 <div class="item-money p-0 col-4 d-flex align-items-end">
-                    <p class="mb-1">+¥${items[i].effect} / sec</p>
+                    <p class="mb-1">+¥${items[i].effect} / 秒</p>
                 </div>
                 <div class="item-quantity p-0 d-flex align-items-center">
                     <p class="m-0 font-l">${items[i].owned}</p>
@@ -417,9 +421,9 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
         <div class="item-about p-2 d-flex justify-content-between">
             <div class="item-about-left text-left d-flex justify-content-start flex-column">
                 <p class="m-0">${items[itemNum].name}</p>
-                <p class="font-s m-0">Max Purchases: ${items[itemNum].maxPurchases}</p>
-                <p class="font-s m-0">Price: ¥${items[itemNum].price}</p>
-                <p class="font-s m-0">Get ${items[itemNum].effect} extra yen per second</p>
+                <p class="font-s m-0">最大所持数: ${items[itemNum].maxPurchases}</p>
+                <p class="font-s m-0">値段: ¥${items[itemNum].price}</p>
+                <p class="font-s m-0">${items[itemNum].description}</p>
             </div>
             <div class="item-about-right col-4 p-0">
                 <img class="buy-item-img" src="${items[itemNum].img}" alt="">
@@ -435,8 +439,8 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
     backPurchaseBtn.classList.add("d-flex", "justify-content-between", "m-2");
     backPurchaseBtn.innerHTML =
     `
-        <button type="button" class="back-btn col-5 btn btn-info">Go Back</button>
-        <button type="button" class="next-btn col-5 btn btn-info">Purchase</button>
+        <button type="button" class="back-btn col-5 btn btn-info">戻る</button>
+        <button type="button" class="next-btn col-5 btn btn-info">購入する</button>
     `;
 
     itemDetail.append(backPurchaseBtn);
@@ -478,7 +482,7 @@ function itemDetailPage(item, page, itemDiv, userAccount) {
             userAccount.flipMachine = items[0].effect * items[0].owned;
             document.querySelector(".flip-total").innerHTML =
             `
-                ¥${userAccount.flipMachine} per second;
+                ¥${userAccount.flipMachine} 獲得
             `;
             if (items[itemNum].name !== "FlipMachine") {
                 let moneyP = document.querySelectorAll(".user-info-p")[3];
@@ -502,7 +506,7 @@ function purchaseWrap(itemDetailEle, itemNum) {
     `
         <div class="purchase-input text-left p-2">
         <label >
-            <p class="mb-1">How Many would you like to purchase?</p>
+            <p class="mb-1">いくつ購入しますか？</p>
             <input type="number" class="text-right" min="0" max="${parseInt(itemNum.maxPurchases)}" value="1">
         </label>
         <p class="total-price text-right p-0 m-0">Total : ¥${itemNum.price}</p>
